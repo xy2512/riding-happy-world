@@ -19,6 +19,16 @@
 └── research/                    # 竞品调研资料
 ```
 
+## 🌐 在线预览
+
+| 文档 | 链接 | 说明 |
+|------|------|------|
+| 📋 **PRD v1.0** | [在线查看](https://xy2512.github.io/riding-happy-world/prd/prd_v1.0.html) | 最终版PRD，内嵌交互原型切片+流程图，可协同查看 |
+| 🚴 **交互原型** | [在线体验](https://xy2512.github.io/riding-happy-world/prototype/prototype_v2.0.html) | 高保真原型（7页完整交互，支持Hash路由） |
+| 📊 **流程图** | [在线查看](https://xy2512.github.io/riding-happy-world/flowcharts/flowcharts.html) | 8个核心业务Mermaid流程图 |
+
+> 💡 **PRD 与原型协同查看**：打开 PRD 在线页面，第8章「交互原型」和第7章「业务流程」已通过 iframe 嵌入原型和流程图，可以在阅读需求文档时直接交互体验原型，无需切换页面。
+
 ## 🚀 快速体验
 
 直接打开 `prototype/prototype_v2.0.html` 即可体验完整交互原型。
