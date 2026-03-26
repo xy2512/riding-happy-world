@@ -1057,8 +1057,39 @@ function switchShop(cat) {
 
 // ==================== FOCUS MODE ====================
 const params = new URLSearchParams(location.search);
-if (params.get('focus')) {
-  navigate(params.get('focus'));
+const FOCUS_PAGE = params.get('focus');
+
+if (FOCUS_PAGE) {
+  // Focus模式：只展示指定页面，禁用导航
+  navigate(FOCUS_PAGE);
+  // 隐藏底部导航
+  const bottomNav = document.getElementById('bottom-nav');
+  if (bottomNav) bottomNav.style.display = 'none';
+  // 禁用所有导航按钮的点击事件（防止切换页面）
+  document.querySelectorAll('.tab-item, button[onclick^="navigate"]').forEach(btn => {
+    const originalOnclick = btn.getAttribute('onclick');
+    if (originalOnclick && originalOnclick.includes('navigate(') && !originalOnclick.includes('navigate(\'' + FOCUS_PAGE) && !originalOnclick.includes('navigate("' + FOCUS_PAGE)) {
+      btn.setAttribute('onclick', 'event.preventDefault(); event.stopPropagation(); showFocusTip(); return false;');
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
+    }
+  });
+  // 重写navigate函数，限制只能停留在focus页面
+  const originalNavigate = navigate;
+  navigate = function(page) {
+    if (page !== FOCUS_PAGE && page !== 'login') {
+      showFocusTip();
+      return;
+    }
+    originalNavigate(page);
+  };
+  function showFocusTip() {
+    const tip = document.createElement('div');
+    tip.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-4 py-2 rounded-full z-50 animate-slide-up';
+    tip.textContent = '🔒 切片模式：请在完整原型中体验其他页面';
+    document.body.appendChild(tip);
+    setTimeout(() => tip.remove(), 2000);
+  }
 } else if (location.hash && location.hash.length > 1) {
   navigate(location.hash.slice(1));
 }
