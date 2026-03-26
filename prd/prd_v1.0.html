@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>骑乐星球 - PRD v1.0 最终版</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;background:#f8fafc;color:#1e293b;line-height:1.8}
+.container{max-width:960px;margin:0 auto;padding:24px 20px}
+h1{font-size:28px;color:#10b981;border-bottom:3px solid #10b981;padding-bottom:12px;margin-bottom:24px}
+h2{font-size:20px;color:#059669;margin-top:36px;padding-bottom:6px;border-bottom:2px solid #d1fae5}
+h3{font-size:16px;color:#047857;margin-top:24px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th{background:#ecfdf5;padding:10px 14px;text-align:left;font-weight:600;color:#047857;border-bottom:2px solid #a7f3d0}
+td{padding:10px 14px;border-bottom:1px solid #e2e8f0}
+tr:hover{background:#f0fdf4}
+.badge{display:inline-block;padding:2px 10px;border-radius:9999px;font-size:12px;font-weight:600}
+.badge-p0{background:#fee2e2;color:#dc2626}.badge-p1{background:#fef3c7;color:#d97706}.badge-p2{background:#f1f5f9;color:#64748b}
+.quote{border-left:3px solid #10b981;background:#ecfdf5;padding:12px 16px;color:#065f46;margin:16px 0;border-radius:0 8px 8px 0}
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:20px;margin:16px 0}
+.iframe-wrap{border:2px solid #a7f3d0;border-radius:12px;overflow:hidden;margin:16px 0;background:#fff}
+.iframe-wrap iframe{width:100%;height:700px;border:none}
+.iframe-label{background:#ecfdf5;padding:8px 14px;font-size:13px;color:#047857;font-weight:600}
+pre{background:#f1f5f9;padding:16px;border-radius:8px;font-size:13px;overflow-x:auto;margin:12px 0}
+ul,ol{padding-left:24px;margin:8px 0}
+li{margin:4px 0}
+hr{border:none;border-top:1px solid #e2e8f0;margin:32px 0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🚴 骑乐星球 — 产品需求文档 v1.0</h1>
+<p style="color:#64748b;font-size:14px;margin-bottom:24px">版本：v1.0 | 日期：2026-03-26 | 状态：最终版</p>
+
+<!-- ===== 1 ===== -->
+<h2>1. 项目概述</h2>
+<h3>1.1 产品定位</h3>
+<p><strong>骑乐星球</strong>是一款面向城市通勤族和骑行爱好者的<strong>游戏化骑行激励Web产品</strong>，通过地图寻宝、宝箱抽奖、成长等级、轻社交等游戏化机制，解决骑行枯燥和用户留存低的问题。</p>
+
+<h3>1.2 核心问题</h3>
+<div class="quote">
+❓ 三大痛点：<br>
+1. <strong>骑行枯燥</strong> — 日常通勤路线固定，缺乏趣味性<br>
+2. <strong>留存率低</strong> — 缺乏持续骑行的正向激励<br>
+3. <strong>缺乏归属感</strong> — 城市骑行者社交连接薄弱
+</div>
+
+<h3>1.3 解决方案</h3>
+<p><strong>「骑行即游戏」</strong> — 每次骑行都是一场城市探索冒险：</p>
+<ul>
+  <li><strong>地图寻宝</strong> — 2D地图随机金币/宝箱/钻石，骑行经过自动拾取</li>
+  <li><strong>宝箱抽奖</strong> — 骑行完成获得宝箱，随机获取骑行币/装扮/优惠券</li>
+  <li><strong>成长等级</strong> — 10级体系 + 9枚成就徽章 + 连续打卡日历</li>
+  <li><strong>轻社交</strong> — 「擦肩而过」无压力社交</li>
+  <li><strong>数字装扮</strong> — 2D单车个性化装扮（车漆/铃铛/挂件/头盔）</li>
+</ul>
+
+<h3>1.4 业务约束</h3>
+<table>
+  <tr><td><strong>产品形态</strong></td><td>Web端高保真交互原型（移动端优先，max-width: 430px）</td></tr>
+  <tr><td><strong>硬件对接</strong></td><td>本期不做，仅模拟数据</td></tr>
+  <tr><td><strong>成功指标</strong></td><td>DAU、骑行里程、次日/7日/30日留存率</td></tr>
+</table>
+
+<!-- ===== 2 ===== -->
+<h2>2. 用户画像</h2>
+<table>
+  <tr><th>维度</th><th>用户A：城市通勤族</th><th>用户B：周末骑行爱好者</th></tr>
+  <tr><td>年龄</td><td>25-35岁</td><td>22-40岁</td></tr>
+  <tr><td>骑行频率</td><td>每周3-5次（通勤）</td><td>每周1-2次（休闲）</td></tr>
+  <tr><td>单次里程</td><td>3-8km</td><td>15-50km</td></tr>
+  <tr><td>核心诉求</td><td>「每天骑车也能有惊喜」</td><td>「看我的骑行成就有多酷」</td></tr>
+</table>
+
+<h3>2.1 用户旅程</h3>
+<div class="card">
+<table>
+  <tr><th>阶段</th><th>情绪</th><th>产品触点</th></tr>
+  <tr><td>发现 → 注册</td><td>😊 好奇</td><td>分享卡片 / 一键登录</td></tr>
+  <tr><td>首次骑行</td><td>🤔 期待</td><td>引导动画 + 彩蛋惊喜</td></tr>
+  <tr><td>骑行中</td><td>🎉 兴奋</td><td>实时地图 + 彩蛋拾取</td></tr>
+  <tr><td>骑行结束</td><td>😍 满足</td><td>数据报告 + 宝箱抽奖</td></tr>
+  <tr><td>持续使用</td><td>💪 成就</td><td>等级 / 徽章 / 排行榜</td></tr>
+  <tr><td>深度参与</td><td>🤝 归属</td><td>社交 + 商城兑换</td></tr>
+</table>
+</div>
+
+<!-- ===== 3 ===== -->
+<h2>3. 竞品分析</h2>
+<table>
+  <tr><th>维度</th><th>骑乐星球</th><th>Keep骑行</th><th>Strava</th><th>哈啰</th><th>Zwift</th></tr>
+  <tr><td>核心定位</td><td>游戏化骑行激励</td><td>综合运动</td><td>专业训练</td><td>共享出行</td><td>虚拟训练</td></tr>
+  <tr><td>地图彩蛋</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>虚拟世界</td></tr>
+  <tr><td>宝箱抽奖</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+  <tr><td>轻社交</td><td>✅ 擦肩而过</td><td>社区</td><td>段位赛</td><td>碳积分</td><td>赛事</td></tr>
+  <tr><td>数字装扮</td><td>✅ 单车个性化</td><td>❌</td><td>❌</td><td>❌</td><td>虚拟装备</td></tr>
+  <tr><td>使用门槛</td><td>⭐ 零门槛Web</td><td>装App</td><td>装App</td><td>装App</td><td>硬件+App</td></tr>
+</table>
+<div class="quote">🎯 差异化：纯Web零门槛 + 地图寻宝 + 擦肩而过轻社交 + 数字单车装扮</div>
+
+<!-- ===== 4 ===== -->
+<h2>4. 产品架构</h2>
+<h3>4.1 信息架构（4 Tab 底部导航）</h3>
+<pre>
+骑乐星球
+├── 🔐 登录页 — 手机号验证码登录
+├── 🏠 首页 ── 今日报告 / 任务入口 / 路线推荐 / 开始骑行
+├── 🗺️ 骑行记录 ── 探索地图(彩蛋) / 周·月统计 / 健康分析 / 历史
+├── 🌟 成长中心 ── 等级进度 / 徽章墙 / 打卡日历
+├── 👤 我的 ── 资产 / 数字单车 / 商城 / 排行 / 健康助手
+├── 🚴 骑行中 ── 实时地图+彩蛋拾取+计时
+└── 🎉 骑行报告 ── 数据汇总+宝箱开启+彩纸
+</pre>
+
+<!-- ===== 5 ===== -->
+<h2>5. 功能需求</h2>
+
+<h3>5.1 P0 功能（MVP 核心）</h3>
+<table>
+  <tr><th>模块</th><th>功能</th><th>说明</th><th>优先级</th></tr>
+  <tr><td>登录</td><td>手机号验证码登录</td><td>+86手机号+6位验证码</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>首页</td><td>今日骑行报告</td><td>里程/时间/热量/碳排/击败百分比</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>首页</td><td>任务快捷入口</td><td>日常任务进度展示</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>首页</td><td>一键开始骑行</td><td>底部大按钮</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>骑行</td><td>骑行记录</td><td>自动记录里程/时间/速度/热量</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>骑行</td><td>地图彩蛋</td><td>2D地图随机金币/宝箱/钻石</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>骑行</td><td>骑行报告+宝箱</td><td>数据汇总+宝箱开启动画</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>成长</td><td>等级系统</td><td>10级等级+XP进度条</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>成长</td><td>徽章墙</td><td>9枚成就徽章</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>成长</td><td>打卡日历</td><td>连续打卡+阶段奖励</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>我的</td><td>资产中心</td><td>骑行币+碳积分</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>我的</td><td>数字单车</td><td>2D展示+装扮</td><td><span class="badge badge-p0">P0</span></td></tr>
+  <tr><td>我的</td><td>兑换商城</td><td>虚拟装扮/实体权益双分类</td><td><span class="badge badge-p0">P0</span></td></tr>
+</table>
+
+<h3>5.2 P1 功能（增强体验）</h3>
+<table>
+  <tr><th>模块</th><th>功能</th><th>说明</th><th>优先级</th></tr>
+  <tr><td>首页</td><td>擦肩而过</td><td>同路骑友数量</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>首页</td><td>智能路线推荐</td><td>风景/心形/健身/美食</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>首页</td><td>周挑战</td><td>累计里程挑战</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>记录</td><td>数据统计</td><td>周/月切换+柱状图</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>记录</td><td>健康分析</td><td>奶茶/种树/心肺换算</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>记录</td><td>一键分享</td><td>生成骑行报告卡片</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>我的</td><td>好友排行榜</td><td>Top3+列表排名</td><td><span class="badge badge-p1">P1</span></td></tr>
+  <tr><td>我的</td><td>骑行健康助手</td><td>周健康报告+建议</td><td><span class="badge badge-p1">P1</span></td></tr>
+</table>
+
+<h3>5.3 P2 功能（远期）</h3>
+<table>
+  <tr><th>模块</th><th>功能</th><th>说明</th><th>优先级</th></tr>
+  <tr><td>社交</td><td>骑行小队</td><td>创建/加入+团队任务</td><td><span class="badge badge-p2">P2</span></td></tr>
+  <tr><td>活动</td><td>限定主题活动</td><td>地球日/联名打卡</td><td><span class="badge badge-p2">P2</span></td></tr>
+  <tr><td>硬件</td><td>蓝牙设备对接</td><td>速度传感器/心率带</td><td><span class="badge badge-p2">P2</span></td></tr>
+</table>
+
+<!-- ===== 6 ===== -->
+<h2>6. 游戏化系统设计</h2>
+
+<h3>6.1 骑行币经济模型</h3>
+<div class="card">
+<table>
+  <tr><th>获取渠道</th><th>奖励</th><th>频率</th></tr>
+  <tr><td>骑行里程</td><td>1km = 10 骑行币</td><td>每次</td></tr>
+  <tr><td>日常任务</td><td>5-20 骑行币</td><td>每日</td></tr>
+  <tr><td>周挑战</td><td>100-200 骑行币</td><td>每周</td></tr>
+  <tr><td>地图彩蛋</td><td>10-50 骑行币</td><td>骑行中</td></tr>
+  <tr><td>宝箱抽奖</td><td>50-500 骑行币</td><td>骑行后</td></tr>
+  <tr><td>连续打卡</td><td>20-100 骑行币</td><td>每日</td></tr>
+</table>
+</div>
+
+<h3>6.2 等级系统</h3>
+<table>
+  <tr><th>等级</th><th>称号</th><th>XP</th><th>解锁权益</th></tr>
+  <tr><td>Lv.1</td><td>新手骑士</td><td>0</td><td>基础功能</td></tr>
+  <tr><td>Lv.2</td><td>城市新手</td><td>100</td><td>自定义头像</td></tr>
+  <tr><td>Lv.3</td><td>骑行学徒</td><td>300</td><td>基础车漆</td></tr>
+  <tr><td>Lv.4</td><td>城市骑士</td><td>600</td><td>打卡日历</td></tr>
+  <tr><td>Lv.5</td><td>城市骑行者</td><td>1,000</td><td>专属骑行券</td></tr>
+  <tr><td>Lv.6</td><td>骑行达人</td><td>2,000</td><td>限定装扮</td></tr>
+  <tr><td>Lv.7</td><td>绿色骑士</td><td>3,500</td><td>骑行小队</td></tr>
+  <tr><td>Lv.8</td><td>城市探索家</td><td>5,500</td><td>高级路线</td></tr>
+  <tr><td>Lv.9</td><td>骑行大师</td><td>8,000</td><td>传说装扮</td></tr>
+  <tr><td>Lv.10</td><td>传奇骑士</td><td>12,000</td><td>全部权益+专属标识</td></tr>
+</table>
+
+<h3>6.3 宝箱规则</h3>
+<table>
+  <tr><th>触发</th><td colspan="3">骑行 ≥ 3km 或完成特定路线 → 获得1次开宝箱机会</td></tr>
+  <tr><th>概率</th><th>类型</th><th>示例</th></tr>
+  <tr><td>40%</td><td>骑行币</td><td>50-200 骑行币</td></tr>
+  <tr><td>25%</td><td>限定装扮</td><td>「极光绿」车漆</td></tr>
+  <tr><td>20%</td><td>优惠券</td><td>共享单车7天卡</td></tr>
+  <tr><td>10%</td><td>稀有装扮</td><td>限定挂件/头盔</td></tr>
+  <tr><td>5%</td><td>传说装扮</td><td>限定传说级车漆</td></tr>
+</table>
+
+<h3>6.4 成就徽章</h3>
+<table>
+  <tr><th>徽章</th><th>条件</th><th>徽章</th><th>条件</th></tr>
+  <tr><td>🏅 新手骑士</td><td>第一次骑行</td><td>🌙 夜骑玩家</td><td>夜骑10次</td></tr>
+  <tr><td>🌱 碳减排先锋</td><td>碳减排10kg</td><td>🗺️ 探索者</td><td>骑行10个区域</td></tr>
+  <tr><td>🏛️ 通勤达人</td><td>连续7天骑行</td><td>🌧️ 雨中勇士</td><td>雨天骑行</td></tr>
+  <tr><td>⚡ 速度之星</td><td>均速>20km/h</td><td>🎁 宝箱猎人</td><td>开50次宝箱</td></tr>
+</table>
+
+<!-- ===== 7 ===== -->
+<h2>7. 核心业务流程</h2>
+<p>详见 <code>flowcharts/flowcharts.html</code>，包含8个Mermaid流程图：</p>
+<ol>
+  <li>用户核心使用流程（登录→骑行→报告→分享闭环）</li>
+  <li>骑行币经济模型（获取→消耗平衡）</li>
+  <li>等级与经验系统（10级成长路径）</li>
+  <li>宝箱开启流程（骑行→抽奖→奖励）</li>
+  <li>任务挑战系统（日常/周/限定三级）</li>
+  <li>擦肩而过轻社交（GPS轨迹匹配）</li>
+  <li>数字单车装扮系统（获取→装备→展示）</li>
+  <li>页面导航结构（4Tab+全屏页面）</li>
+</ol>
+
+<!-- ===== 8 ===== -->
+<h2>8. 交互原型</h2>
+
+<h3>8.1 完整高保真原型</h3>
+<div class="iframe-wrap">
+  <div class="iframe-label">📄 prototype/prototype_v2.0.html — 完整交互原型（7个页面，含登录/首页/骑行记录/成长中心/我的/骑行中/骑行报告）</div>
+  <iframe src="prototype/prototype_v2.0.html" loading="lazy"></iframe>
+</div>
+
+<h3>8.2 页面清单</h3>
+<table>
+  <tr><th>页面</th><th>Hash</th><th>核心交互</th></tr>
+  <tr><td>登录页</td><td><code>#login</code></td><td>手机号+验证码登录</td></tr>
+  <tr><td>首页</td><td><code>#home</code></td><td>骑行报告+任务+路线推荐+开始骑行</td></tr>
+  <tr><td>骑行记录</td><td><code>#record</code></td><td>探索地图+彩蛋拾取+统计</td></tr>
+  <tr><td>成长中心</td><td><code>#growth</code></td><td>等级+徽章+打卡日历</td></tr>
+  <tr><td>我的</td><td><code>#profile</code></td><td>资产+单车+商城+排行+健康助手</td></tr>
+  <tr><td>骑行中</td><td><code>#riding</code></td><td>实时地图+彩蛋+计时</td></tr>
+  <tr><td>骑行报告</td><td><code>#report</code></td><td>数据+宝箱开启+彩纸特效</td></tr>
+</table>
+
+<h3>8.3 业务流程图</h3>
+<div class="iframe-wrap">
+  <div class="iframe-label">📊 flowcharts/flowcharts.html — 8个核心业务Mermaid流程图</div>
+  <iframe src="flowcharts/flowcharts.html" loading="lazy"></iframe>
+</div>
+
+<!-- ===== 9 ===== -->
+<h2>9. 数据指标</h2>
+<div class="quote">⭐ 北极星指标：<strong>周活跃骑行里程</strong>（Weekly Active Riding Distance）</div>
+<table>
+  <tr><th>类别</th><th>指标</th><th>定义</th><th>MVP目标</th></tr>
+  <tr><td>增长</td><td>DAU</td><td>日活跃用户</td><td>-</td></tr>
+  <tr><td>活跃</td><td>骑行触发率</td><td>DAU中开始骑行的比例</td><td>≥60%</td></tr>
+  <tr><td>活跃</td><td>人均骑行里程</td><td>日均</td><td>≥5km</td></tr>
+  <tr><td>留存</td><td>次日留存</td><td>注册次日回访</td><td>≥40%</td></tr>
+  <tr><td>留存</td><td>7日留存</td><td>7日后回访</td><td>≥25%</td></tr>
+  <tr><td>留存</td><td>30日留存</td><td>30日后回访</td><td>≥15%</td></tr>
+  <tr><td>游戏化</td><td>彩蛋拾取率</td><td>骑行中拾取彩蛋占比</td><td>≥80%</td></tr>
+  <tr><td>游戏化</td><td>宝箱开启率</td><td>获得宝箱后开启比例</td><td>≥90%</td></tr>
+  <tr><td>商业化</td><td>骑行币兑换率</td><td>兑换用户占比</td><td>≥30%</td></tr>
+</table>
+
+<!-- ===== 10 ===== -->
+<h2>10. 演进规划</h2>
+<table>
+  <tr><th>阶段</th><th>时间</th><th>目标</th><th>核心功能</th></tr>
+  <tr><td><span class="badge badge-p0">MVP</span></td><td>Q2 2026</td><td>验证核心游戏化模型</td><td>登录+骑行记录+彩蛋+宝箱+等级+徽章+打卡+商城</td></tr>
+  <tr><td><span class="badge badge-p1">V1.5</span></td><td>Q3 2026</td><td>增强社交与内容</td><td>擦肩而过+排行榜+智能路线+骑行小队+限定活动</td></tr>
+  <tr><td><span class="badge badge-p2">V2.0</span></td><td>Q4 2026</td><td>数据深化与商业化</td><td>硬件对接+健康分析+品牌联名+公益体系</td></tr>
+</table>
+
+<hr>
+<p style="text-align:center;color:#94a3b8;font-size:13px">— 骑乐星球 PRD v1.0 — End of Document —</p>
+
+</div>
+</body>
+</html>

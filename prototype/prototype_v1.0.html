@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>骑乐星球 - 交互原型 v1.0</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-hover': '#1D4ED8',
+            'primary-light': '#EFF6FF',
+            coin: '#F59E0B',
+            'coin-dark': '#D97706',
+            'coin-light': '#FEF3C7',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { 
+      font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; 
+      margin: 0; padding: 0; background: #F8FAFC; 
+      max-width: 430px; margin: 0 auto; min-height: 100vh;
+      position: relative; overflow-x: hidden;
+    }
+    body.focus-mode .page { pointer-events: none !important; opacity: 0.3 !important; filter: blur(2px); }
+    body.focus-mode .page.focus-target { pointer-events: auto !important; opacity: 1 !important; filter: none; position: relative; z-index: 100; }
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #fff; border-top: 1px solid #E2E8F0; display: flex; padding: 6px 0 env(safe-area-inset-bottom); z-index: 200; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 6px 0; cursor: pointer; transition: all 0.2s; }
+    .nav-item .nav-icon { font-size: 22px; margin-bottom: 2px; }
+    .nav-item .nav-label { font-size: 11px; color: #94A3B8; font-weight: 500; }
+    .nav-item.active .nav-label { color: #2563EB; font-weight: 600; }
+    .nav-item.active .nav-icon { transform: scale(1.1); }
+    @keyframes coinFloat { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(0.5); } }
+    .coin-float { animation: coinFloat 0.8s ease-out forwards; position: absolute; pointer-events: none; font-size: 16px; font-weight: bold; }
+    @keyframes chestShake { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
+    @keyframes chestOpen { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+    .chest-shake { animation: chestShake 0.5s ease-in-out; }
+    .chest-open { animation: chestOpen 0.6s ease; }
+    @keyframes eggPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    .egg-pulse { animation: eggPulse 1.5s ease-in-out infinite; }
+    @keyframes progressGrow { from { width: 0; } }
+    .progress-grow { animation: progressGrow 1s ease-out; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-slide-up { animation: slideUp 0.35s ease-out; }
+    @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0); opacity: 1; } 100% { transform: translateY(200px) rotate(720deg); opacity: 0; } }
+    .confetti { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confettiFall 1.5s ease-in forwards; }
+    @keyframes badgeUnlock { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 60% { transform: scale(1.2) rotate(10deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+    .badge-unlock { animation: badgeUnlock 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .heartbeat { animation: heartbeat 2s ease-in-out infinite; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .map-bg { background: linear-gradient(180deg, #E0F2FE 0%, #BAE6FD 30%, #7DD3FC 60%, #38BDF8 100%); position: relative; overflow: hidden; }
+    .map-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 49%, #CBD5E1 49%, #CBD5E1 51%, transparent 51%) 0 0/40px 40px,
+                  linear-gradient(transparent 49%, #CBD5E1 49%, #CBD5E1 51%, transparent 51%) 0 0/40px 40px;
+      opacity: 0.3;
+    }
+    .map-road { position: absolute; background: #F1F5F9; border-radius: 4px; box-shadow: 0 0 0 2px #E2E8F0; }
+    .map-building { position: absolute; background: #CBD5E1; border-radius: 3px; opacity: 0.5; }
+    .map-park { position: absolute; background: #86EFAC; border-radius: 50%; opacity: 0.4; }
+    .route-card { cursor: pointer; transition: all 0.2s; }
+    .route-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .route-card:active { transform: scale(0.98); }
+    /* Calendar */
+    .cal-day { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; }
+    .cal-done { background: #2563EB; color: #fff; }
+    .cal-today { border: 2px solid #2563EB; color: #2563EB; font-weight: 700; }
+    .cal-future { color: #CBD5E1; }
+    /* Health card */
+    .health-metric { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); }
+  </style>
+</head>
+<body>
+
+<!-- ==================== PAGE: HOME ==================== -->
+<div id="page-home" class="page active" data-page="home">
+  <div class="bg-gradient-to-br from-primary via-blue-500 to-indigo-500 text-white px-5 pt-12 pb-6 rounded-b-3xl">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <p class="text-sm opacity-80">早上好 ☀️</p>
+        <p class="font-bold text-xl">骑乐星球</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1 bg-white/20 rounded-full px-3 py-1.5">
+          <span>🪙</span>
+          <span class="font-bold text-sm">1,280</span>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-lg cursor-pointer" onclick="location.hash='#mine'">👤</div>
+      </div>
+    </div>
+    <!-- Level bar -->
+    <div class="bg-white/10 rounded-2xl p-3">
+      <div class="flex items-center justify-between mb-1.5">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-coin flex items-center justify-center text-xs font-bold text-white">8</div>
+          <span class="text-sm font-semibold">城市骑行者</span>
+        </div>
+        <span class="text-xs opacity-80">1680 / 2000 EXP</span>
+      </div>
+      <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-yellow-400 to-coin rounded-full progress-grow" style="width: 84%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-5 -mt-3 relative z-10 pb-28">
+    <!-- Today's ride report -->
+    <div class="bg-white rounded-2xl p-4 shadow-lg shadow-blue-100/50 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm text-gray-800">📊 今日骑行报告</h3>
+        <span class="text-xs text-gray-400">08:30 记录</span>
+      </div>
+      <div class="grid grid-cols-4 gap-2 text-center mb-3">
+        <div><p class="text-lg font-bold text-primary">3.2</p><p class="text-xs text-gray-400">公里</p></div>
+        <div><p class="text-lg font-bold text-gray-800">12</p><p class="text-xs text-gray-400">分钟</p></div>
+        <div><p class="text-lg font-bold text-orange-500">85</p><p class="text-xs text-gray-400">千卡</p></div>
+        <div><p class="text-lg font-bold text-green-500">0.7</p><p class="text-xs text-gray-400">kg 减碳</p></div>
+      </div>
+      <!-- Defeat percentage -->
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-600">今日表现击败了</span>
+          <span class="text-2xl font-extrabold text-primary">62%</span>
+        </div>
+        <div class="w-full h-2 bg-blue-100 rounded-full mt-1.5 overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-primary to-indigo-500 rounded-full progress-grow" style="width: 62%"></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">的骑行者 👏</p>
+      </div>
+      <!-- Energy chest + pass by -->
+      <div class="flex gap-2 mb-3">
+        <div class="flex-1 bg-yellow-50 border border-yellow-200 rounded-xl p-2.5 flex items-center gap-2 cursor-pointer heartbeat" onclick="openChestModal()">
+          <span class="text-xl">🎁</span>
+          <div>
+            <p class="text-xs font-bold text-yellow-700">今日能量宝箱</p>
+            <p class="text-xs text-yellow-500">点击开启</p>
+          </div>
+        </div>
+        <div class="flex-1 bg-blue-50 border border-blue-200 rounded-xl p-2.5 flex items-center gap-2">
+          <span class="text-xl">👥</span>
+          <div>
+            <p class="text-xs font-bold text-blue-700">擦肩而过</p>
+            <p class="text-xs text-blue-500">今日 23 位骑友</p>
+          </div>
+        </div>
+      </div>
+      <!-- Share -->
+      <button class="w-full bg-primary/5 text-primary rounded-xl py-2.5 text-sm font-medium hover:bg-primary/10 transition flex items-center justify-center gap-1">
+        📤 一键分享到社交平台
+      </button>
+    </div>
+
+    <!-- Start ride button -->
+    <button onclick="location.hash='#riding'" class="w-full bg-gradient-to-r from-primary to-blue-400 text-white rounded-2xl p-4 flex items-center gap-4 shadow-lg shadow-blue-200 hover:shadow-xl transition-all active:scale-[0.98] mb-5">
+      <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-3xl">🚴</div>
+      <div class="text-left flex-1">
+        <p class="font-bold text-lg">开始骑行</p>
+        <p class="text-xs opacity-80">今日目标 3km · 已完成 3.2km ✅</p>
+      </div>
+      <span class="text-2xl">→</span>
+    </button>
+
+    <!-- Tasks quick entry -->
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm text-gray-800">📋 今日任务</h3>
+        <span class="text-xs text-gray-400">3/3 已完成 ✅</span>
+      </div>
+      <div class="flex gap-2 overflow-x-auto hide-scrollbar">
+        <div class="flex-shrink-0 bg-white rounded-xl p-3 shadow-sm border border-green-200 min-w-[140px]">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-green-500">✅</span>
+            <p class="text-xs font-semibold text-gray-600 line-through">骑行 1km</p>
+          </div>
+          <span class="text-xs font-bold text-green-500">+15🪙</span>
+        </div>
+        <div class="flex-shrink-0 bg-white rounded-xl p-3 shadow-sm border border-green-200 min-w-[140px]">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-green-500">✅</span>
+            <p class="text-xs font-semibold text-gray-600 line-through">经过 1 个公园</p>
+          </div>
+          <span class="text-xs font-bold text-green-500">+20🪙</span>
+        </div>
+        <div class="flex-shrink-0 bg-white rounded-xl p-3 shadow-sm border border-green-200 min-w-[140px]">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-green-500">✅</span>
+            <p class="text-xs font-semibold text-gray-600 line-through">骑行 10 分钟</p>
+          </div>
+          <span class="text-xs font-bold text-green-500">+15🪙</span>
+        </div>
+      </div>
+      <!-- Weekly challenge -->
+      <div class="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-3 mt-3 flex items-center gap-3">
+        <span class="text-2xl">🏆</span>
+        <div class="flex-1">
+          <p class="text-xs font-bold text-gray-800">周挑战：累计骑行 10km</p>
+          <div class="w-full h-1.5 bg-orange-100 rounded-full mt-1 overflow-hidden">
+            <div class="h-full bg-orange-400 rounded-full" style="width: 62%"></div>
+          </div>
+          <p class="text-xs text-orange-500 mt-0.5">6.2/10 km · 奖励 150🪙</p>
+        </div>
+      </div>
+      <!-- Limited event -->
+      <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-3 mt-2 flex items-center gap-3 cursor-pointer">
+        <span class="text-2xl">🌍</span>
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-green-800">地球日绿色出行周</p>
+            <span class="text-xs text-red-500 bg-red-50 px-1.5 py-0.5 rounded-full">进行中</span>
+          </div>
+          <p class="text-xs text-green-500">累计 30km 解锁限定宝箱 + 绿色车漆</p>
+        </div>
+        <span class="text-gray-300">→</span>
+      </div>
+    </div>
+
+    <!-- Smart route recommendations -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm text-gray-800">🛣️ 智能路线推荐</h3>
+        <span class="text-xs text-primary font-medium">更多 →</span>
+      </div>
+      <div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+        <!-- Route 1: Scenic -->
+        <div class="route-card flex-shrink-0 w-48 bg-white rounded-2xl overflow-hidden shadow-sm" onclick="location.hash='#riding'">
+          <div class="h-24 bg-gradient-to-br from-green-300 to-emerald-400 flex items-center justify-center relative">
+            <span class="text-5xl opacity-50">🌳</span>
+            <div class="absolute bottom-2 left-2 bg-white/90 rounded-full px-2 py-0.5 text-xs font-bold text-green-700">风景路线</div>
+            <div class="absolute bottom-2 right-2 bg-black/30 rounded-full px-2 py-0.5 text-xs text-white">⏱ ~25min</div>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-bold text-gray-800">城市绿道骑行</p>
+            <p class="text-xs text-gray-400 mt-0.5">途经中央公园 · 5.2km</p>
+          </div>
+        </div>
+        <!-- Route 2: Heart shape -->
+        <div class="route-card flex-shrink-0 w-48 bg-white rounded-2xl overflow-hidden shadow-sm" onclick="location.hash='#riding'">
+          <div class="h-24 bg-gradient-to-br from-pink-300 to-rose-400 flex items-center justify-center relative">
+            <span class="text-5xl opacity-50">💖</span>
+            <div class="absolute bottom-2 left-2 bg-white/90 rounded-full px-2 py-0.5 text-xs font-bold text-rose-700">心形路线</div>
+            <div class="absolute bottom-2 right-2 bg-black/30 rounded-full px-2 py-0.5 text-xs text-white">⏱ ~18min</div>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-bold text-gray-800">爱心探索之旅</p>
+            <p class="text-xs text-gray-400 mt-0.5">在地图上画一颗心 · 3.8km</p>
+          </div>
+        </div>
+        <!-- Route 3: Fitness -->
+        <div class="route-card flex-shrink-0 w-48 bg-white rounded-2xl overflow-hidden shadow-sm" onclick="location.hash='#riding'">
+          <div class="h-24 bg-gradient-to-br from-orange-300 to-amber-400 flex items-center justify-center relative">
+            <span class="text-5xl opacity-50">💪</span>
+            <div class="absolute bottom-2 left-2 bg-white/90 rounded-full px-2 py-0.5 text-xs font-bold text-orange-700">健身路线</div>
+            <div class="absolute bottom-2 right-2 bg-black/30 rounded-full px-2 py-0.5 text-xs text-white">⏱ ~30min</div>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-bold text-gray-800">燃脂冲刺骑</p>
+            <p class="text-xs text-gray-400 mt-0.5">高坡度挑战 · 6.5km</p>
+          </div>
+        </div>
+        <!-- Route 4: Food -->
+        <div class="route-card flex-shrink-0 w-48 bg-white rounded-2xl overflow-hidden shadow-sm" onclick="location.hash='#riding'">
+          <div class="h-24 bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center relative">
+            <span class="text-5xl opacity-50">🍜</span>
+            <div class="absolute bottom-2 left-2 bg-white/90 rounded-full px-2 py-0.5 text-xs font-bold text-orange-700">美食路线</div>
+            <div class="absolute bottom-2 right-2 bg-black/30 rounded-full px-2 py-0.5 text-xs text-white">⏱ ~20min</div>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-bold text-gray-800">早餐寻味骑</p>
+            <p class="text-xs text-gray-400 mt-0.5">串联老城美食 · 4.0km</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: RIDING RECORDS ==================== -->
+<div id="page-records" class="page" data-page="records">
+  <div class="px-5 pt-12 pb-28">
+    <h2 class="text-xl font-bold text-gray-800 mb-1">🗺️ 骑行记录</h2>
+    <p class="text-sm text-gray-400 mb-4">探索城市的每一条路</p>
+
+    <!-- Map area -->
+    <div class="map-bg rounded-2xl mb-4" style="height: 200px; position: relative;">
+      <div class="map-road" style="top: 30%; left: 0; width: 100%; height: 20px; transform: rotate(-3deg);"></div>
+      <div class="map-road" style="top: 60%; left: 10%; width: 80%; height: 20px; transform: rotate(5deg);"></div>
+      <div class="map-road" style="top: 10%; left: 40%; width: 20px; height: 80%;"></div>
+      <div class="map-road" style="top: 20%; left: 70%; width: 20px; height: 60%;"></div>
+      <div class="map-building" style="top: 15%; left: 15%; width: 35px; height: 25px;"></div>
+      <div class="map-building" style="top: 12%; left: 55%; width: 45px; height: 30px;"></div>
+      <div class="map-building" style="top: 65%; left: 25%; width: 30px; height: 35px;"></div>
+      <div class="map-park" style="top: 40%; left: 20%; width: 50px; height: 50px;"></div>
+      <div class="map-park" style="top: 18%; left: 78%; width: 35px; height: 35px;"></div>
+      <!-- Explored areas highlight -->
+      <div class="absolute" style="top: 20%; left: 15%; width: 70px; height: 70px; background: rgba(37,99,235,0.15); border-radius: 50%;"></div>
+      <div class="absolute" style="top: 45%; left: 55%; width: 55px; height: 55px; background: rgba(37,99,235,0.15); border-radius: 50%;"></div>
+      <!-- Map eggs -->
+      <div class="absolute egg-pulse cursor-pointer" style="top: 35%; left: 80%;" onclick="collectEgg(this, 15)"><div class="text-xl">🪙</div></div>
+      <div class="absolute egg-pulse cursor-pointer" style="top: 55%; left: 45%;" onclick="collectEgg(this, 20)"><div class="text-xl">🎁</div></div>
+      <div class="absolute egg-pulse cursor-pointer" style="top: 25%; left: 35%;" onclick="collectEgg(this, 10)"><div class="text-xl">🪙</div></div>
+      <!-- Explored label -->
+      <div class="absolute bottom-3 left-3 bg-white/90 backdrop-blur rounded-full px-3 py-1 shadow text-xs font-medium text-gray-700">
+        📍 已探索 <strong class="text-primary">42%</strong> 城市区域
+      </div>
+    </div>
+
+    <!-- Stats tabs -->
+    <div class="flex bg-gray-100 rounded-xl p-1 mb-4">
+      <button class="flex-1 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm" id="tab-week" onclick="switchStatsTab('week')">本周</button>
+      <button class="flex-1 py-2 rounded-lg text-sm font-medium text-gray-500" id="tab-month" onclick="switchStatsTab('month')">本月</button>
+    </div>
+
+    <!-- Weekly stats -->
+    <div id="stats-week" class="space-y-3">
+      <div class="bg-white rounded-2xl p-4 shadow-sm">
+        <h4 class="text-sm font-bold text-gray-800 mb-3">📈 本周骑行数据</h4>
+        <div class="grid grid-cols-3 gap-3 text-center mb-3">
+          <div><p class="text-xl font-bold text-primary">18.6</p><p class="text-xs text-gray-400">总里程 km</p></div>
+          <div><p class="text-xl font-bold text-gray-800">4</p><p class="text-xs text-gray-400">骑行次数</p></div>
+          <div><p class="text-xl font-bold text-orange-500">526</p><p class="text-xs text-gray-400">千卡消耗</p></div>
+        </div>
+        <!-- Bar chart -->
+        <div class="flex items-end justify-around h-24 gap-1 pt-2">
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-primary/80 rounded-t-md" style="height: 40px"></div>
+            <span class="text-xs text-gray-400">一</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-primary/80 rounded-t-md" style="height: 55px"></div>
+            <span class="text-xs text-gray-400">二</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-primary/80 rounded-t-md" style="height: 25px"></div>
+            <span class="text-xs text-gray-400">三</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-primary rounded-t-md" style="height: 70px"></div>
+            <span class="text-xs text-primary font-bold">四</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-gray-200 rounded-t-md" style="height: 8px"></div>
+            <span class="text-xs text-gray-300">五</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-gray-200 rounded-t-md" style="height: 8px"></div>
+            <span class="text-xs text-gray-300">六</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full bg-gray-200 rounded-t-md" style="height: 8px"></div>
+            <span class="text-xs text-gray-300">日</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 shadow-sm">
+        <h4 class="text-sm font-bold text-gray-800 mb-2">💚 健康分析</h4>
+        <div class="bg-green-50 rounded-xl p-3 text-sm text-gray-700 leading-relaxed">
+          本周骑行消耗 <strong class="text-green-600">526 千卡</strong>，相当于少喝了 <strong class="text-green-600">2.6 杯奶茶</strong> 🧋<br>
+          碳减排 <strong class="text-green-600">4.2 kg</strong>，相当于种了 <strong class="text-green-600">0.2 棵树</strong> 🌳
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly stats (hidden by default) -->
+    <div id="stats-month" class="space-y-3 hidden">
+      <div class="bg-white rounded-2xl p-4 shadow-sm">
+        <h4 class="text-sm font-bold text-gray-800 mb-3">📈 本月骑行数据</h4>
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div><p class="text-xl font-bold text-primary">62.4</p><p class="text-xs text-gray-400">总里程 km</p></div>
+          <div><p class="text-xl font-bold text-gray-800">15</p><p class="text-xs text-gray-400">骑行次数</p></div>
+          <div><p class="text-xl font-bold text-orange-500">1,860</p><p class="text-xs text-gray-400">千卡消耗</p></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm">
+        <h4 class="text-sm font-bold text-gray-800 mb-2">💚 本月健康分析</h4>
+        <div class="bg-green-50 rounded-xl p-3 text-sm text-gray-700 leading-relaxed">
+          本月骑行改善了你的心肺功能，继续保持！💪<br>
+          累计消耗 <strong class="text-green-600">1,860 千卡</strong>，减碳 <strong class="text-green-600">14.2 kg</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent ride list -->
+    <div class="mt-4">
+      <h3 class="font-bold text-sm text-gray-800 mb-3">🛣️ 骑行历史</h3>
+      <div class="space-y-2">
+        <div class="bg-white rounded-xl p-3.5 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">🏢</div>
+          <div class="flex-1"><p class="text-sm font-semibold text-gray-800">通勤骑行 · 早上</p><p class="text-xs text-gray-400">今天 08:30</p></div>
+          <div class="text-right"><p class="text-sm font-bold text-primary">3.2 km</p><p class="text-xs text-gray-400">12 min</p></div>
+        </div>
+        <div class="bg-white rounded-xl p-3.5 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">🌳</div>
+          <div class="flex-1"><p class="text-sm font-semibold text-gray-800">城市绿道探索</p><p class="text-xs text-gray-400">昨天 17:45</p></div>
+          <div class="text-right"><p class="text-sm font-bold text-primary">5.8 km</p><p class="text-xs text-gray-400">22 min</p></div>
+        </div>
+        <div class="bg-white rounded-xl p-3.5 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center">💖</div>
+          <div class="flex-1"><p class="text-sm font-semibold text-gray-800">爱心探索之旅</p><p class="text-xs text-gray-400">3月24日 09:15</p></div>
+          <div class="text-right"><p class="text-sm font-bold text-primary">3.8 km</p><p class="text-xs text-gray-400">18 min</p></div>
+        </div>
+        <div class="bg-white rounded-xl p-3.5 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">💪</div>
+          <div class="flex-1"><p class="text-sm font-semibold text-gray-800">燃脂冲刺骑</p><p class="text-xs text-gray-400">3月23日 07:00</p></div>
+          <div class="text-right"><p class="text-sm font-bold text-primary">6.5 km</p><p class="text-xs text-gray-400">30 min</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: RIDING (Active ride) ==================== -->
+<div id="page-riding" class="page" data-page="riding">
+  <div class="map-bg" style="height: 50vh; position: relative;">
+    <div class="map-road" style="top: 30%; left: 0; width: 100%; height: 24px; transform: rotate(-5deg);"></div>
+    <div class="map-road" style="top: 55%; left: 10%; width: 80%; height: 24px; transform: rotate(8deg);"></div>
+    <div class="map-road" style="top: 10%; left: 35%; width: 24px; height: 80%; transform: rotate(3deg);"></div>
+    <div class="map-road" style="top: 20%; left: 65%; width: 24px; height: 60%;"></div>
+    <div class="map-building" style="top: 15%; left: 15%; width: 40px; height: 30px;"></div>
+    <div class="map-building" style="top: 12%; left: 55%; width: 50px; height: 35px;"></div>
+    <div class="map-building" style="top: 60%; left: 20%; width: 35px; height: 40px;"></div>
+    <div class="map-park" style="top: 40%; left: 20%; width: 60px; height: 60px;"></div>
+    <div class="map-park" style="top: 20%; left: 75%; width: 40px; height: 40px;"></div>
+    <!-- Map eggs -->
+    <div class="absolute egg-pulse cursor-pointer" style="top: 28%; left: 25%;" onclick="collectEgg(this, 10)"><div class="text-2xl drop-shadow-lg">🪙</div></div>
+    <div class="absolute egg-pulse cursor-pointer" style="top: 38%; left: 50%;" onclick="collectEgg(this, 15)"><div class="text-2xl drop-shadow-lg">🪙</div></div>
+    <div class="absolute egg-pulse cursor-pointer" style="top: 52%; left: 35%;" onclick="collectEgg(this, 0, true)"><div class="text-2xl drop-shadow-lg">🎁</div></div>
+    <div class="absolute egg-pulse cursor-pointer" style="top: 18%; left: 40%;" onclick="collectEgg(this, 5)"><div class="text-2xl drop-shadow-lg">🪙</div></div>
+    <div class="absolute egg-pulse cursor-pointer" style="top: 62%; left: 60%;" onclick="collectEgg(this, 25)"><div class="text-2xl drop-shadow-lg">💎</div></div>
+    <!-- Rider -->
+    <div class="absolute" style="top: 33%; left: 42%; transform: translate(-50%, -50%);">
+      <div class="relative">
+        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-2xl shadow-lg shadow-blue-300 border-2 border-white">🚴</div>
+        <div class="absolute -inset-2 rounded-full bg-primary/20 animate-ping"></div>
+      </div>
+    </div>
+    <!-- Top overlay -->
+    <div class="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
+      <button onclick="location.hash='#home'" class="w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-lg text-gray-600 hover:bg-white transition">←</button>
+      <div class="bg-white/90 backdrop-blur rounded-full px-3 py-1.5 shadow-lg flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <span class="text-xs font-medium text-gray-700">骑行中...</span>
+      </div>
+    </div>
+    <!-- Bottom distance overlay -->
+    <div class="absolute bottom-4 left-4 right-4 z-10">
+      <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-lg">
+        <div class="flex justify-around text-center">
+          <div><p class="text-2xl font-bold text-primary" id="ride-distance">3.24</p><p class="text-xs text-gray-500">公里</p></div>
+          <div class="w-px bg-gray-200"></div>
+          <div><p class="text-2xl font-bold text-gray-800" id="ride-time">12:35</p><p class="text-xs text-gray-500">时长</p></div>
+          <div class="w-px bg-gray-200"></div>
+          <div><p class="text-2xl font-bold text-gray-800">15.2</p><p class="text-xs text-gray-500">km/h</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="px-5 py-4 pb-28 bg-white">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold text-sm text-gray-800">本次拾取</h3>
+      <span class="text-xs text-gray-400">已获得 35 骑行币</span>
+    </div>
+    <div class="flex gap-2 mb-4 overflow-x-auto hide-scrollbar">
+      <div class="flex-shrink-0 bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2 flex items-center gap-1"><span>🪙</span><span class="text-sm font-bold text-yellow-700">+10</span></div>
+      <div class="flex-shrink-0 bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2 flex items-center gap-1"><span>🪙</span><span class="text-sm font-bold text-yellow-700">+15</span></div>
+      <div class="flex-shrink-0 bg-purple-50 border border-purple-200 rounded-xl px-3 py-2 flex items-center gap-1"><span>🎁</span><span class="text-sm font-bold text-purple-700">宝箱</span></div>
+      <div class="flex-shrink-0 bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2 flex items-center gap-1"><span>🪙</span><span class="text-sm font-bold text-yellow-700">+5</span></div>
+      <div class="flex-shrink-0 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2 flex items-center gap-1"><span>💎</span><span class="text-sm font-bold text-blue-700">+25</span></div>
+    </div>
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="bg-orange-50 rounded-xl p-3 text-center"><p class="text-lg font-bold text-orange-600">86</p><p class="text-xs text-orange-400">千卡</p></div>
+      <div class="bg-green-50 rounded-xl p-3 text-center"><p class="text-lg font-bold text-green-600">1.6</p><p class="text-xs text-green-400">kg 减碳</p></div>
+      <div class="bg-blue-50 rounded-xl p-3 text-center"><p class="text-lg font-bold text-blue-600">35</p><p class="text-xs text-blue-400">骑行币</p></div>
+    </div>
+    <button onclick="endRide()" class="w-full bg-red-500 text-white rounded-2xl py-4 font-bold text-lg shadow-lg shadow-red-200 hover:bg-red-600 transition active:scale-[0.98]">🏁 结束骑行</button>
+  </div>
+</div>
+
+<!-- ==================== PAGE: REPORT (after ride) ==================== -->
+<div id="page-report" class="page" data-page="report">
+  <div class="px-5 pt-12 pb-28">
+    <button onclick="location.hash='#records'" class="mb-4 text-gray-500 hover:text-gray-700 transition text-sm font-medium">← 返回</button>
+    <div class="text-center mb-5">
+      <div class="text-5xl mb-3">🎉</div>
+      <h2 class="text-xl font-bold text-gray-800">骑行完成！</h2>
+      <p class="text-sm text-gray-400 mt-1">今天 08:30 - 08:42</p>
+    </div>
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 mb-4">
+      <div class="grid grid-cols-2 gap-4 text-center">
+        <div><p class="text-3xl font-extrabold text-primary">3.24</p><p class="text-xs text-gray-500 mt-1">公里</p></div>
+        <div><p class="text-3xl font-extrabold text-gray-800">12:35</p><p class="text-xs text-gray-500 mt-1">时长</p></div>
+        <div><p class="text-2xl font-bold text-orange-500">86 kcal</p><p class="text-xs text-gray-500 mt-1">消耗热量</p></div>
+        <div><p class="text-2xl font-bold text-green-500">1.6 kg</p><p class="text-xs text-gray-500 mt-1">碳减排</p></div>
+      </div>
+    </div>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 mb-4">
+      <h3 class="font-bold text-sm text-yellow-800 mb-3">🎁 本次奖励</h3>
+      <div class="flex items-center justify-around">
+        <div class="text-center"><div class="text-2xl">🪙</div><p class="text-sm font-bold text-yellow-700 mt-1">+35</p><p class="text-xs text-yellow-500">骑行币</p></div>
+        <div class="text-center"><div class="text-2xl">⭐</div><p class="text-sm font-bold text-yellow-700 mt-1">+45</p><p class="text-xs text-yellow-500">经验值</p></div>
+        <div class="text-center cursor-pointer" onclick="openChestModal()"><div class="text-2xl egg-pulse">🎁</div><p class="text-sm font-bold text-purple-700 mt-1">宝箱 ×1</p><p class="text-xs text-purple-400">点击开启</p></div>
+      </div>
+    </div>
+    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">👥</span>
+        <div class="flex-1"><p class="font-bold text-sm text-blue-800">擦肩而过</p><p class="text-xs text-blue-500 mt-0.5">今日同路段遇到 <strong>23</strong> 位骑友 🎉</p></div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button class="flex-1 bg-primary text-white rounded-xl py-3 font-medium hover:bg-primary-hover transition text-sm">📤 生成分享卡片</button>
+      <button class="flex-1 bg-gray-100 text-gray-700 rounded-xl py-3 font-medium hover:bg-gray-200 transition text-sm" onclick="location.hash='#records'">返回记录</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: GROWTH ==================== -->
+<div id="page-growth" class="page" data-page="growth">
+  <div class="px-5 pt-12 pb-28">
+    <h2 class="text-xl font-bold text-gray-800 mb-1">🌟 成长中心</h2>
+    <p class="text-sm text-gray-400 mb-5">记录你的每一次进步</p>
+
+    <!-- Level card -->
+    <div class="bg-gradient-to-br from-primary to-indigo-500 rounded-2xl p-5 text-white mb-5">
+      <div class="flex items-center gap-4 mb-3">
+        <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center">
+          <div class="w-12 h-12 rounded-full bg-coin flex items-center justify-center text-2xl font-bold text-white">8</div>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-lg font-bold">城市骑行者</h3>
+          <p class="text-sm opacity-80">Lv8</p>
+        </div>
+        <div class="bg-white/10 rounded-xl px-3 py-2 text-center">
+          <p class="text-xs opacity-70">距下级</p>
+          <p class="text-sm font-bold">320 EXP</p>
+        </div>
+      </div>
+      <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden mb-2">
+        <div class="h-full bg-gradient-to-r from-yellow-400 to-coin rounded-full progress-grow" style="width: 84%"></div>
+      </div>
+      <div class="flex justify-between text-xs opacity-70">
+        <span>1680 EXP</span>
+        <span>2000 EXP · Lv9 骑行达人</span>
+      </div>
+      <div class="bg-white/10 rounded-xl p-3 mt-3">
+        <p class="text-xs font-medium mb-1">🔓 Lv9 解锁权益</p>
+        <p class="text-xs opacity-80">宝箱高级奖励概率提升 · 免费骑行券 ×1 · 解锁橙色车漆</p>
+      </div>
+    </div>
+
+    <!-- Badge wall -->
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm text-gray-800">🏅 成就徽章墙</h3>
+        <span class="text-xs text-gray-400">5/12 已解锁</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="bg-white rounded-xl p-3 text-center shadow-sm"><div class="text-2xl mb-1 badge-unlock">🌱</div><p class="text-xs font-semibold text-gray-700">新手骑士</p><p class="text-xs text-gray-400">第一次骑行</p></div>
+        <div class="bg-white rounded-xl p-3 text-center shadow-sm"><div class="text-2xl mb-1 badge-unlock">♻️</div><p class="text-xs font-semibold text-gray-700">碳减排先锋</p><p class="text-xs text-gray-400">减碳 10kg</p></div>
+        <div class="bg-white rounded-xl p-3 text-center shadow-sm"><div class="text-2xl mb-1 badge-unlock">🔥</div><p class="text-xs font-semibold text-gray-700">通勤达人</p><p class="text-xs text-gray-400">连续7天骑行</p></div>
+        <div class="bg-white rounded-xl p-3 text-center shadow-sm"><div class="text-2xl mb-1 badge-unlock">🌙</div><p class="text-xs font-semibold text-gray-700">夜骑玩家</p><p class="text-xs text-gray-400">夜间骑行 10 次</p></div>
+        <div class="bg-white rounded-xl p-3 text-center shadow-sm"><div class="text-2xl mb-1 badge-unlock">🗺️</div><p class="text-xs font-semibold text-gray-700">探索者</p><p class="text-xs text-gray-400">探索 10 个区域</p></div>
+        <div class="bg-gray-100 rounded-xl p-3 text-center opacity-50"><div class="text-2xl mb-1">🌧️</div><p class="text-xs font-semibold text-gray-500">雨中勇士</p><p class="text-xs text-gray-400">雨天骑行</p></div>
+        <div class="bg-gray-100 rounded-xl p-3 text-center opacity-50"><div class="text-2xl mb-1">⚡</div><p class="text-xs font-semibold text-gray-500">速度之星</p><p class="text-xs text-gray-400">极速 30km/h</p></div>
+        <div class="bg-gray-100 rounded-xl p-3 text-center opacity-50"><div class="text-2xl mb-1">🎁</div><p class="text-xs font-semibold text-gray-500">宝箱猎人</p><p class="text-xs text-gray-400">开启 50 个宝箱</p></div>
+        <div class="bg-gray-100 rounded-xl p-3 text-center opacity-50"><div class="text-2xl mb-1">👥</div><p class="text-xs font-semibold text-gray-500">社交达人</p><p class="text-xs text-gray-400">添加 10 位好友</p></div>
+      </div>
+    </div>
+
+    <!-- Check-in calendar -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm text-gray-800">📅 连续打卡</h3>
+        <span class="text-xs text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full font-medium">🔥 连续 5 天</span>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm font-medium text-gray-800">2026年3月</span>
+          <span class="text-xs text-gray-400">打卡奖励：满7天获宝箱×1</span>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-center mb-2">
+          <span class="text-xs text-gray-400 py-1">一</span>
+          <span class="text-xs text-gray-400 py-1">二</span>
+          <span class="text-xs text-gray-400 py-1">三</span>
+          <span class="text-xs text-gray-400 py-1">四</span>
+          <span class="text-xs text-gray-400 py-1">五</span>
+          <span class="text-xs text-gray-400 py-1">六</span>
+          <span class="text-xs text-gray-400 py-1">日</span>
+        </div>
+        <div class="grid grid-cols-7 gap-1">
+          <!-- Week 1 (March starts on Sunday, so blank Mon-Sat) -->
+          <div class="cal-day cal-future"></div>
+          <div class="cal-day cal-future"></div>
+          <div class="cal-day cal-future"></div>
+          <div class="cal-day cal-future"></div>
+          <div class="cal-day cal-future"></div>
+          <div class="cal-day cal-future"></div>
+          <div class="cal-day cal-done">1</div>
+          <!-- Week 2 -->
+          <div class="cal-day cal-done">2</div>
+          <div class="cal-day cal-done">3</div>
+          <div class="cal-day cal-done">4</div>
+          <div class="cal-day cal-done">5</div>
+          <div class="cal-day bg-gray-50 text-gray-400">6</div>
+          <div class="cal-day cal-done">7</div>
+          <div class="cal-day cal-done">8</div>
+          <!-- Week 3 -->
+          <div class="cal-day cal-done">9</div>
+          <div class="cal-day bg-gray-50 text-gray-400">10</div>
+          <div class="cal-day cal-done">11</div>
+          <div class="cal-day cal-done">12</div>
+          <div class="cal-day cal-done">13</div>
+          <div class="cal-day bg-gray-50 text-gray-400">14</div>
+          <div class="cal-day cal-done">15</div>
+          <!-- Week 4 -->
+          <div class="cal-day cal-done">16</div>
+          <div class="cal-day cal-done">17</div>
+          <div class="cal-day bg-gray-50 text-gray-400">18</div>
+          <div class="cal-day cal-done">19</div>
+          <div class="cal-day cal-done">20</div>
+          <div class="cal-day bg-gray-50 text-gray-400">21</div>
+          <div class="cal-day bg-gray-50 text-gray-400">22</div>
+          <!-- Week 5 (current week) -->
+          <div class="cal-day cal-done">23</div>
+          <div class="cal-day cal-done">24</div>
+          <div class="cal-day cal-done">25</div>
+          <div class="cal-day cal-today">26</div>
+          <div class="cal-day cal-future">27</div>
+          <div class="cal-day cal-future">28</div>
+          <div class="cal-day cal-future">29</div>
+          <!-- Week 6 -->
+          <div class="cal-day cal-future">30</div>
+          <div class="cal-day cal-future">31</div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4 text-xs text-gray-400">
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-primary"></span> 已打卡</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full border-2 border-primary"></span> 今天</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-gray-100"></span> 未打卡</span>
+            </div>
+            <span class="text-xs font-bold text-primary">本月 18/31 天</span>
+          </div>
+        </div>
+        <!-- Check-in reward progress -->
+        <div class="mt-3 bg-orange-50 rounded-xl p-3">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-bold text-orange-700">🎁 7天打卡奖励</span>
+            <span class="text-xs text-orange-500">5/7 天</span>
+          </div>
+          <div class="w-full h-2 bg-orange-100 rounded-full overflow-hidden">
+            <div class="h-full bg-orange-400 rounded-full" style="width: 71%"></div>
+          </div>
+          <p class="text-xs text-orange-500 mt-1">再坚持 2 天获得宝箱 ×1 + 100 骑行币</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: MINE ==================== -->
+<div id="page-mine" class="page" data-page="mine">
+  <div class="px-5 pt-12 pb-28">
+    <!-- Profile header -->
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 text-white mb-5">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-16 h-16 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center text-3xl">🚴</div>
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">城市骑行者</h2>
+          <p class="text-sm opacity-60">Lv8 · 1680/2000 EXP</p>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-lg cursor-pointer hover:bg-white/20 transition">⚙️</div>
+      </div>
+      <!-- Asset center -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white/10 rounded-xl p-3 flex items-center gap-3">
+          <span class="text-2xl">🪙</span>
+          <div>
+            <p class="text-lg font-bold">1,280</p>
+            <p class="text-xs opacity-60">骑行币</p>
+          </div>
+        </div>
+        <div class="bg-white/10 rounded-xl p-3 flex items-center gap-3">
+          <span class="text-2xl">♻️</span>
+          <div>
+            <p class="text-lg font-bold">860</p>
+            <p class="text-xs opacity-60">碳积分</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Digital bike -->
+    <div class="mb-5">
+      <h3 class="font-bold text-sm text-gray-800 mb-3">🏍️ 我的专属数字单车</h3>
+      <div class="bg-gradient-to-br from-slate-50 to-gray-100 rounded-2xl p-5 text-center relative overflow-hidden border border-gray-200">
+        <div class="text-7xl mb-2">🚲</div>
+        <!-- Equipped items -->
+        <div class="flex justify-center gap-3 mb-3">
+          <div class="bg-blue-100 rounded-full px-2.5 py-1 text-xs font-medium text-blue-700">🎨 蓝色车漆</div>
+          <div class="bg-yellow-100 rounded-full px-2.5 py-1 text-xs font-medium text-yellow-700">🔔 叮铃铃铛</div>
+          <div class="bg-gray-200 rounded-full px-2.5 py-1 text-xs font-medium text-gray-500">🪖 未装备</div>
+          <div class="bg-gray-200 rounded-full px-2.5 py-1 text-xs font-medium text-gray-500">🎀 未装备</div>
+        </div>
+        <button class="bg-primary text-white rounded-xl px-6 py-2 text-sm font-medium hover:bg-primary-hover transition">更换装扮</button>
+      </div>
+    </div>
+
+    <!-- Shop -->
+    <div class="mb-5">
+      <h3 class="font-bold text-sm text-gray-800 mb-3">🛍️ 兑换商城</h3>
+      <!-- Shop tabs -->
+      <div class="flex bg-gray-100 rounded-xl p-1 mb-3">
+        <button class="flex-1 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm" id="shop-tab-physical" onclick="switchShopTab('physical')">实体权益</button>
+        <button class="flex-1 py-2 rounded-lg text-sm font-medium text-gray-500" id="shop-tab-virtual" onclick="switchShopTab('virtual')">虚拟装扮</button>
+      </div>
+      <!-- Physical items -->
+      <div id="shop-physical" class="grid grid-cols-2 gap-3">
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🎫</div>
+          <p class="text-sm font-semibold text-gray-800">共享单车月卡</p>
+          <p class="text-xs text-gray-400 mb-3">哈啰/美团通用</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">500 🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">☕</div>
+          <p class="text-sm font-semibold text-gray-800">瑞幸咖啡券</p>
+          <p class="text-xs text-gray-400 mb-3">立减10元</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">300 🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2"> 🥤</div>
+          <p class="text-sm font-semibold text-gray-800">奶茶优惠券</p>
+          <p class="text-xs text-gray-400 mb-3">喜茶/奈雪通用</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">200 🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🌿</div>
+          <p class="text-sm font-semibold text-gray-800">环保小礼品</p>
+          <p class="text-xs text-gray-400 mb-3">环保帆布袋</p>
+          <button class="w-full bg-green-500 text-white rounded-xl py-2 text-sm font-medium">400 🪙</button>
+        </div>
+      </div>
+      <!-- Virtual items -->
+      <div id="shop-virtual" class="grid grid-cols-2 gap-3 hidden">
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🎨</div>
+          <p class="text-sm font-semibold text-gray-800">烈焰红车漆</p>
+          <p class="text-xs text-gray-400 mb-3">限定装扮</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">800 🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🔔</div>
+          <p class="text-sm font-semibold text-gray-800">叮铃铃铛</p>
+          <p class="text-xs text-gray-400 mb-3">装饰挂件</p>
+          <button class="w-full bg-gray-300 text-green-600 rounded-xl py-2 text-sm font-medium">✅ 已装备</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🎀</div>
+          <p class="text-sm font-semibold text-gray-800">蝴蝶结挂件</p>
+          <p class="text-xs text-gray-400 mb-3">可爱装饰</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">150 🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🪖</div>
+          <p class="text-sm font-semibold text-gray-800">星空头盔</p>
+          <p class="text-xs text-gray-400 mb-3">Lv15 解锁</p>
+          <button class="w-full bg-gray-300 text-gray-500 rounded-xl py-2 text-sm font-medium cursor-not-allowed">🔒 1000🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🌈</div>
+          <p class="text-sm font-semibold text-gray-800">彩虹车漆</p>
+          <p class="text-xs text-gray-400 mb-3">活动限定</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">1200 🪙</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm text-center">
+          <div class="text-4xl mb-2">🎮</div>
+          <p class="text-sm font-semibold text-gray-800">像素铃铛</p>
+          <p class="text-xs text-gray-400 mb-3">复古风</p>
+          <button class="w-full bg-primary text-white rounded-xl py-2 text-sm font-medium">100 🪙</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ranking -->
+    <div class="mb-5">
+      <h3 class="font-bold text-sm text-gray-800 mb-3">🏆 好友排行榜</h3>
+      <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <!-- Top 3 mini -->
+        <div class="flex items-center justify-around p-4 bg-gradient-to-r from-yellow-50 to-amber-50">
+          <div class="text-center"><span class="text-xs text-gray-400">🥈</span><p class="text-xs font-bold text-gray-700 mt-1">骑行侠</p><p class="text-xs text-gray-400">45.2km</p></div>
+          <div class="text-center -mt-2"><span class="text-lg">👑</span><div class="w-10 h-10 rounded-full bg-yellow-300 flex items-center justify-center text-lg mx-auto my-1">🚴</div><p class="text-xs font-bold">闪电飞侠</p><p class="text-xs text-gray-500">62.8km</p></div>
+          <div class="text-center"><span class="text-xs text-gray-400">🥉</span><p class="text-xs font-bold text-gray-700 mt-1">风行者</p><p class="text-xs text-gray-400">38.5km</p></div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50">
+          <span class="w-6 text-center font-bold text-primary text-xs">8</span>
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-white">我</div>
+          <div class="flex-1"><p class="text-sm font-semibold text-gray-800">我</p><p class="text-xs text-gray-400">Lv8 城市骑行者</p></div>
+          <p class="text-sm font-bold text-primary">6.2 km</p>
+        </div>
+        <div class="flex items-center gap-3 p-3 border-t border-gray-50">
+          <span class="w-6 text-center font-bold text-gray-400 text-xs">4</span>
+          <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs">🚴</div>
+          <div class="flex-1"><p class="text-sm text-gray-700">追风少年</p></div>
+          <p class="text-sm font-medium text-gray-600">32.1 km</p>
+        </div>
+        <div class="flex items-center gap-3 p-3 border-t border-gray-50">
+          <span class="w-6 text-center font-bold text-gray-400 text-xs">5</span>
+          <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-xs">🚴</div>
+          <div class="flex-1"><p class="text-sm text-gray-700">绿骑达人</p></div>
+          <p class="text-sm font-medium text-gray-600">28.7 km</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health assistant -->
+    <div>
+      <h3 class="font-bold text-sm text-gray-800 mb-3">💚 骑行健康助手</h3>
+      <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-2xl">💊</span>
+          <div>
+            <p class="font-bold text-sm text-green-800">本周骑行健康报告</p>
+            <p class="text-xs text-green-500">3月20日 - 3月26日</p>
+          </div>
+        </div>
+        <div class="space-y-2 mb-3">
+          <div class="bg-white rounded-xl p-3">
+            <div class="flex items-center gap-2 mb-1">
+              <span>❤️</span>
+              <span class="text-sm font-medium text-gray-800">心肺功能</span>
+              <span class="ml-auto text-xs font-bold text-green-500">良好 ↑</span>
+            </div>
+            <p class="text-xs text-gray-500 leading-relaxed">本周骑行改善了你的心肺功能，继续保持！有氧运动时长建议每周≥150分钟。</p>
+          </div>
+          <div class="bg-white rounded-xl p-3">
+            <div class="flex items-center gap-2 mb-1">
+              <span>🔥</span>
+              <span class="text-sm font-medium text-gray-800">热量消耗</span>
+              <span class="ml-auto text-xs font-bold text-orange-500">526 kcal</span>
+            </div>
+            <p class="text-xs text-gray-500 leading-relaxed">本周消耗 526 千卡，相当于少喝了 <strong class="text-orange-500">2.6 杯奶茶</strong> 🧋</p>
+          </div>
+          <div class="bg-white rounded-xl p-3">
+            <div class="flex items-center gap-2 mb-1">
+              <span>🌱</span>
+              <span class="text-sm font-medium text-gray-800">碳减排贡献</span>
+              <span class="ml-auto text-xs font-bold text-green-500">4.2 kg</span>
+            </div>
+            <p class="text-xs text-gray-500 leading-relaxed">减碳 4.2kg，相当于种了 <strong class="text-green-500">0.2 棵树</strong> 🌳</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-3">
+          <p class="text-sm font-medium text-gray-800 mb-1">💡 个性化建议</p>
+          <ul class="text-xs text-gray-500 leading-relaxed space-y-1">
+            <li>• 你本周骑行频率不错！建议增加一次周末长距离骑行（10km+）</li>
+            <li>• 平均速度 15.2km/h，可尝试间歇训练提升速度</li>
+            <li>• 连续骑行 5 天，注意适当休息日恢复 😊</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHEST MODAL ==================== -->
+<div id="chest-modal" class="fixed inset-0 z-[300] hidden items-center justify-center bg-black/50" style="max-width:430px; margin:0 auto;">
+  <div class="bg-white rounded-3xl p-6 mx-6 text-center modal-slide-up relative overflow-hidden" id="chest-content">
+    <button onclick="closeChestModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-200 transition text-sm">✕</button>
+    <div id="chest-closed">
+      <div class="text-6xl mb-4 chest-shake cursor-pointer" id="chest-icon" onclick="openChest()">🎁</div>
+      <h3 class="text-lg font-bold text-gray-800 mb-1">今日能量宝箱</h3>
+      <p class="text-sm text-gray-400 mb-4">骑行 ≥3km 获得</p>
+      <button onclick="openChest()" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-2xl px-8 py-3 font-bold shadow-lg hover:shadow-xl transition active:scale-[0.98]">✨ 开启宝箱</button>
+    </div>
+    <div id="chest-opened" class="hidden">
+      <div id="chest-reward" class="text-6xl mb-4"></div>
+      <h3 class="text-lg font-bold text-gray-800 mb-1" id="chest-title">恭喜获得！</h3>
+      <p class="text-sm text-gray-400 mb-4" id="chest-desc"></p>
+      <button onclick="closeChestModal()" class="bg-primary text-white rounded-2xl px-8 py-3 font-bold shadow-lg hover:shadow-xl transition active:scale-[0.98]">太棒了！收下</button>
+    </div>
+    <div id="sparkles-container" class="absolute inset-0 pointer-events-none"></div>
+  </div>
+</div>
+
+<!-- ==================== BOTTOM NAV (4 tabs) ==================== -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="nav-item active" data-target="home" onclick="location.hash='#home'">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">首页</span>
+  </div>
+  <div class="nav-item" data-target="records" onclick="location.hash='#records'">
+    <span class="nav-icon">🗺️</span>
+    <span class="nav-label">骑行记录</span>
+  </div>
+  <div class="nav-item" data-target="growth" onclick="location.hash='#growth'">
+    <span class="nav-icon">🌟</span>
+    <span class="nav-label">成长中心</span>
+  </div>
+  <div class="nav-item" data-target="mine" onclick="location.hash='#mine'">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">我的</span>
+  </div>
+</div>
+
+<script>
+  const pages = document.querySelectorAll('.page');
+  const navItems = document.querySelectorAll('.nav-item');
+  
+  function navigate(hash) {
+    const pageName = hash.replace('#', '') || 'home';
+    pages.forEach(p => p.classList.remove('active'));
+    navItems.forEach(n => n.classList.remove('active'));
+    const targetPage = document.getElementById('page-' + pageName);
+    if (targetPage) targetPage.classList.add('active');
+    navItems.forEach(n => { if (n.dataset.target === pageName) n.classList.add('active'); });
+    const bottomNav = document.getElementById('bottom-nav');
+    bottomNav.style.display = (pageName === 'riding' || pageName === 'report') ? 'none' : 'flex';
+    window.scrollTo(0, 0);
+  }
+
+  window.addEventListener('hashchange', () => navigate(location.hash));
+  navigate(location.hash || '#home');
+
+  // Focus mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const focusFeature = urlParams.get('focus');
+  if (focusFeature) {
+    document.body.classList.add('focus-mode');
+    const ft = document.querySelector('[data-page="' + focusFeature + '"]');
+    if (ft) ft.classList.add('focus-target');
+  }
+
+  // Egg collection
+  let totalCollected = 35;
+  function collectEgg(element, amount, isChest) {
+    element.classList.remove('egg-pulse');
+    element.style.transition = 'all 0.3s ease';
+    element.style.transform = 'scale(0)';
+    element.style.opacity = '0';
+    const floater = document.createElement('div');
+    floater.className = 'coin-float';
+    floater.textContent = isChest ? '宝箱!' : '+' + amount;
+    floater.style.left = element.style.left;
+    floater.style.top = element.style.top;
+    floater.style.color = isChest ? '#7C3AED' : '#D97706';
+    element.parentElement.appendChild(floater);
+    setTimeout(() => floater.remove(), 800);
+    setTimeout(() => element.remove(), 300);
+    if (!isChest) totalCollected += amount;
+  }
+
+  function endRide() {
+    if (confirm('确定要结束本次骑行吗？')) { location.hash = '#report'; }
+  }
+
+  // Stats tab switch
+  function switchStatsTab(tab) {
+    document.getElementById('stats-week').classList.toggle('hidden', tab !== 'week');
+    document.getElementById('stats-month').classList.toggle('hidden', tab !== 'month');
+    document.getElementById('tab-week').className = tab === 'week'
+      ? 'flex-1 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm'
+      : 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500';
+    document.getElementById('tab-month').className = tab === 'month'
+      ? 'flex-1 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm'
+      : 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500';
+  }
+
+  // Shop tab switch
+  function switchShopTab(tab) {
+    document.getElementById('shop-physical').classList.toggle('hidden', tab !== 'physical');
+    document.getElementById('shop-virtual').classList.toggle('hidden', tab !== 'virtual');
+    document.getElementById('shop-tab-physical').className = tab === 'physical'
+      ? 'flex-1 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm'
+      : 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500';
+    document.getElementById('shop-tab-virtual').className = tab === 'virtual'
+      ? 'flex-1 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm'
+      : 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500';
+  }
+
+  // Chest modal
+  function openChestModal() {
+    const modal = document.getElementById('chest-modal');
+    modal.style.display = 'flex';
+    document.getElementById('chest-closed').classList.remove('hidden');
+    document.getElementById('chest-opened').classList.add('hidden');
+  }
+  function closeChestModal() { document.getElementById('chest-modal').style.display = 'none'; }
+  function openChest() {
+    const icon = document.getElementById('chest-icon');
+    icon.className = 'text-6xl mb-4 chest-open cursor-pointer';
+    setTimeout(() => {
+      document.getElementById('chest-closed').classList.add('hidden');
+      document.getElementById('chest-opened').classList.remove('hidden');
+      const rewards = [
+        { emoji: '🪙 45', title: '恭喜获得 45 骑行币！', desc: '已存入你的账户' },
+        { emoji: '🎨', title: '获得限定车漆碎片 ×1', desc: '集齐3个碎片可兑换限定车漆' },
+        { emoji: '🪙 60', title: '恭喜获得 60 骑行币！', desc: '银色宝箱大奖！' },
+        { emoji: '⭐', title: '获得双倍经验卡 ×1', desc: '下次骑行经验翻倍' },
+      ];
+      const r = rewards[Math.floor(Math.random() * rewards.length)];
+      document.getElementById('chest-reward').textContent = r.emoji;
+      document.getElementById('chest-title').textContent = r.title;
+      document.getElementById('chest-desc').textContent = r.desc;
+      createConfetti();
+    }, 600);
+  }
+  function createConfetti() {
+    const container = document.getElementById('sparkles-container');
+    container.innerHTML = '';
+    const colors = ['#EF4444','#F59E0B','#10B981','#2563EB','#7C3AED','#EC4899'];
+    for (let i = 0; i < 20; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100+'%'; c.style.top = '20%';
+      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDelay = Math.random()*0.5+'s';
+      c.style.animationDuration = (1+Math.random())+'s';
+      container.appendChild(c);
+    }
+    setTimeout(() => container.innerHTML = '', 2000);
+  }
+
+  // Ride timer
+  let seconds = 755;
+  setInterval(() => {
+    if (document.getElementById('page-riding').classList.contains('active')) {
+      seconds++;
+      const m = Math.floor(seconds/60), s = seconds%60;
+      const el = document.getElementById('ride-time');
+      if (el) el.textContent = m + ':' + (s<10?'0':'') + s;
+    }
+  }, 1000);
+</script>
+</body>
+</html>

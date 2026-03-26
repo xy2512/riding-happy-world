@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>骑乐星球 - PRD v0.5</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-hover': '#1D4ED8',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+    html { scroll-behavior: smooth; }
+    /* TOC */
+    .toc { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; overflow-y: auto; background: #fff; border-right: 1px solid #E2E8F0; padding: 24px 0; z-index: 100; }
+    .toc a { display: block; padding: 8px 24px; color: #64748B; font-size: 13px; text-decoration: none; transition: all 0.2s; border-left: 3px solid transparent; }
+    .toc a:hover { color: #2563EB; background: #F1F5F9; }
+    .toc a.active { color: #2563EB; border-left-color: #2563EB; background: #EFF6FF; font-weight: 600; }
+    .toc .toc-title { padding: 0 24px 16px; font-size: 16px; font-weight: 700; color: #1E293B; border-bottom: 1px solid #E2E8F0; margin-bottom: 8px; }
+    .toc .toc-sub a { padding-left: 40px; font-size: 12px; }
+    /* Content */
+    .content { margin-left: 260px; max-width: 900px; padding: 48px 32px; min-height: 100vh; }
+    /* Table */
+    .prd-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .prd-table thead { background: #F1F5F9; }
+    .prd-table th { padding: 10px 16px; text-align: left; font-weight: 500; color: #475569; font-size: 13px; border-bottom: 2px solid #E2E8F0; }
+    .prd-table td { padding: 10px 16px; border-bottom: 1px solid #E2E8F0; color: #1E293B; }
+    .prd-table tr:nth-child(even) { background: #FAFBFC; }
+    .prd-table tr:hover { background: #EFF6FF; }
+    /* Badge */
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+    .badge-p0 { background: #FEE2E2; color: #DC2626; }
+    .badge-p1 { background: #FEF3C7; color: #D97706; }
+    .badge-p2 { background: #F1F5F9; color: #64748B; }
+    /* Quote */
+    .prd-quote { border-left: 3px solid #2563EB; background: #EFF6FF; padding: 12px 16px; color: #1E40AF; margin: 16px 0; border-radius: 0 8px 8px 0; }
+    /* Card */
+    .feature-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 24px; }
+    .feature-card h3 { font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #E2E8F0; }
+    /* Journey Map */
+    .journey-stage { display: flex; gap: 16px; margin-bottom: 16px; }
+    .journey-stage .stage-header { min-width: 80px; padding: 8px 12px; background: #2563EB; color: #fff; border-radius: 8px; text-align: center; font-weight: 600; font-size: 14px; }
+    .journey-stage .stage-content { flex: 1; background: #F8FAFC; border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.8; }
+    /* Section header */
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; margin-top: 48px; }
+    .section-header .section-num { width: 36px; height: 36px; background: #2563EB; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+    .section-header h2 { font-size: 22px; font-weight: 600; color: #1E293B; margin: 0; }
+    /* Header */
+    .prd-header { background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%); color: #fff; padding: 40px 32px; margin-left: 260px; border-radius: 0 0 24px 24px; }
+    .prd-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    /* Version banner */
+    .version-banner { background: #FEF3C7; color: #92400E; padding: 8px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .toc { display: none; }
+      .content, .prd-header { margin-left: 0; }
+    }
+    /* Placeholder for prototype */
+    .prototype-placeholder { background: #F1F5F9; border: 2px dashed #CBD5E1; border-radius: 12px; padding: 40px; text-align: center; color: #94A3B8; font-size: 14px; }
+  </style>
+</head>
+<body class="bg-[#F8FAFC]">
+
+  <!-- Header -->
+  <div class="prd-header">
+    <div class="max-w-[900px]">
+      <h1>🚴 骑乐星球</h1>
+      <p style="font-size: 16px; opacity: 0.9; margin-bottom: 12px;">游戏化骑行激励工具 — 产品需求文档</p>
+      <div style="display: flex; gap: 24px; font-size: 13px; opacity: 0.8;">
+        <span>版本：<strong>v0.5</strong>（初稿）</span>
+        <span>日期：2026-03-26</span>
+        <span>平台：Web（移动端优先）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">📋 目录导航</div>
+    <a href="#project-info" class="active">一、项目信息</a>
+    <a href="#background" class="toc-sub">二、需求背景与目标</a>
+    <a href="#users" class="toc-sub">三、用户画像与旅程</a>
+    <a href="#market" class="toc-sub">四、市场定位与竞品</a>
+    <a href="#features" class="toc-sub">五、功能清单</a>
+    <a href="#logic" class="toc-sub">六、核心业务逻辑</a>
+    <a href="#prototype-section" class="toc-sub">七、详细方案 <em>（待补充）</em></a>
+    <a href="#flowcharts" class="toc-sub">八、流程图 <em>（待补充）</em></a>
+    <a href="#exceptions" class="toc-sub">九、异常处理 <em>（待补充）</em></a>
+    <a href="#analytics" class="toc-sub">十、埋点方案 <em>（待补充）</em></a>
+    <a href="#roadmap" class="toc-sub">十一、演进规划</a>
+  </nav>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- 版本提示 -->
+    <div class="version-banner">
+      ⚠️ 当前为初版草案（v0.5），详细方案、流程图、异常处理等章节将在原型确认后补充完善。
+    </div>
+
+    <!-- 一、项目信息 -->
+    <div class="section-header" id="project-info">
+      <div class="section-num">1</div>
+      <h2>项目信息与版本记录</h2>
+    </div>
+
+    <table class="prd-table">
+      <tr><td style="width:120px; color:#64748B; font-weight:500;">产品名称</td><td><strong>骑乐星球</strong></td></tr>
+      <tr><td style="color:#64748B; font-weight:500;">版本定义</td><td>v0.5 初稿 — 确立功能模块与核心逻辑</td></tr>
+      <tr><td style="color:#64748B; font-weight:500;">核心目标</td><td>通过游戏化机制提升通勤族和骑行爱好者的骑行频率与留存率</td></tr>
+      <tr><td style="color:#64748B; font-weight:500;">目标平台</td><td>Web（移动端优先，响应式设计）</td></tr>
+      <tr><td style="color:#64748B; font-weight:500;">日期</td><td>2026-03-26</td></tr>
+    </table>
+
+    <h3 style="font-size: 16px; font-weight: 600; margin: 24px 0 12px;">版本记录</h3>
+    <table class="prd-table">
+      <thead><tr><th>日期</th><th>版本号</th><th>修改内容</th></tr></thead>
+      <tbody>
+        <tr><td>2026-03-26</td><td>v0.5</td><td>初稿，确立5大功能模块与核心逻辑</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 二、需求背景与目标 -->
+    <div class="section-header" id="background">
+      <div class="section-num">2</div>
+      <h2>需求背景与目标</h2>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">2.1 现状问题</h3>
+    <div class="feature-card">
+      <p style="color: #1E293B; line-height: 1.8; font-size: 14px;">
+        通勤族和休闲骑行者面临三大核心痛点：
+      </p>
+      <ul style="color: #1E293B; line-height: 2; font-size: 14px; padding-left: 20px;">
+        <li><strong>骑行过程枯燥乏味</strong>：每天重复的通勤路线缺乏新鲜感，骑行本身没有正反馈机制，难以形成习惯。</li>
+        <li><strong>缺乏持续动力</strong>：运动类App往往只记录数据（里程、卡路里），缺少游戏化的即时激励，用户在"新鲜期"过后迅速流失。</li>
+        <li><strong>社交门槛高</strong>：现有骑行社区（如Strava、行者）偏向专业竞技，对 casual 用户不友好；"加好友"的社交压力让用户望而却步。</li>
+      </ul>
+      <div class="prd-quote" style="margin-top: 16px;">
+        <strong>💡 典型场景</strong>：小李，28岁程序员，想通过骑行通勤健身。第一周充满热情，第二周开始觉得"就是骑车而已没什么意思"，第三周恢复打车。数据记录App上的骑行记录永远停留在3次。
+      </div>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">2.2 为什么现在做</h3>
+    <ul style="color: #1E293B; line-height: 2; font-size: 14px; padding-left: 20px;">
+      <li><strong>碳普惠政策红利</strong>：各地政府积极推进碳积分、绿色出行激励，为骑行产品的"碳积分兑换"提供政策土壤。</li>
+      <li><strong>共享经济基础设施成熟</strong>：共享单车覆盖率极高，用户骑行行为已养成，但缺乏"从行为到激励"的桥梁。</li>
+      <li><strong>游戏化成熟方法论</strong>：Duolingo、Keep等产品的游戏化设计已被验证有效，可迁移到骑行场景。</li>
+    </ul>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">2.3 目标矩阵</h3>
+    <table class="prd-table">
+      <thead><tr><th>目标类型</th><th>描述</th><th>衡量指标</th><th>目标值（上线3个月）</th></tr></thead>
+      <tbody>
+        <tr><td>核心业务目标</td><td>提升用户骑行频率和留存</td><td>DAU / 7日留存率 / 30日留存率</td><td>DAU 5000+ / 7日留存 ≥40% / 30日留存 ≥20%</td></tr>
+        <tr><td>用户体验目标</td><td>让用户觉得骑行有趣</td><td>单次骑行完成率 / 宝箱开启率</td><td>完成率 ≥85% / 宝箱开启率 ≥70%</td></tr>
+        <tr><td>商业目标</td><td>建立可持续的激励生态</td><td>骑行币兑换率 / 合作方数量</td><td>兑换率 ≥30% / 合作方 ≥5家</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 三、用户画像 -->
+    <div class="section-header" id="users">
+      <div class="section-num">3</div>
+      <h2>用户画像与使用场景</h2>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">3.1 典型用户画像</h3>
+
+    <div class="feature-card">
+      <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px;">
+        <div style="width: 48px; height: 48px; background: #EFF6FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">🏢</div>
+        <div>
+          <h4 style="font-size: 16px; font-weight: 600; color: #1E293B; margin: 0;">画像A：通勤族小王</h4>
+          <p style="color: #64748B; font-size: 13px; margin: 4px 0 0;">25-30岁 | 互联网/互联网从业者 | 每天通勤5-15km</p>
+        </div>
+      </div>
+      <ul style="font-size: 14px; color: #1E293B; line-height: 1.8; padding-left: 16px;">
+        <li><strong>核心诉求</strong>：想坚持骑行通勤，但缺乏动力和正反馈</li>
+        <li><strong>使用频率</strong>：工作日每天 1-2 次</li>
+        <li><strong>技术水平</strong>：普通用户，会用共享单车和地图App</li>
+        <li><strong>关注点</strong>：操作简单、省时间、有趣味</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px;">
+        <div style="width: 48px; height: 48px; background: #F0FDF4; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">🚴</div>
+        <div>
+          <h4 style="font-size: 16px; font-weight: 600; color: #1E293B; margin: 0;">画像B：骑行爱好者老陈</h4>
+          <p style="color: #64748B; font-size: 13px; margin: 4px 0 0;">28-40岁 | 周末骑行圈活跃 | 每周骑行30-100km</p>
+        </div>
+      </div>
+      <ul style="font-size: 14px; color: #1E293B; line-height: 1.8; padding-left: 16px;">
+        <li><strong>核心诉求</strong>：记录骑行数据、探索新路线、与骑友互动</li>
+        <li><strong>使用频率</strong>：周末集中使用，工作日偶尔</li>
+        <li><strong>技术水平</strong>：熟练，使用过Keep/行者/Strava等骑行工具</li>
+        <li><strong>关注点</strong>：数据精准、社交互动、成就感</li>
+      </ul>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">3.2 核心用户旅程图</h3>
+    <div class="feature-card">
+      <table class="prd-table">
+        <thead><tr><th>阶段</th><th>用户触点</th><th>用户行为</th><th>痛点/情绪</th><th>产品机会点</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>发现</strong></td>
+            <td>社交媒体/朋友推荐</td>
+            <td>看到分享卡片或"擦肩而过"提示，产生好奇</td>
+            <td>对"地图寻宝"概念感兴趣</td>
+            <td>分享卡片引流 + 轻社交好奇心驱动</td>
+          </tr>
+          <tr>
+            <td><strong>首次骑行</strong></td>
+            <td>打开网页 → 开始骑行</td>
+            <td>授权定位 → 开始记录 → 发现地图彩蛋 → 结束获得宝箱</td>
+            <td>惊喜感："路上还能捡金币！"</td>
+            <td>3分钟内体验"正反馈闭环"</td>
+          </tr>
+          <tr>
+            <td><strong>持续使用</strong></td>
+            <td>每日任务 + 打卡</td>
+            <td>看任务列表 → 骑行完成 → 领骑行币 → 升级</td>
+            <td>习惯养成："今天还没骑"</td>
+            <td>连续打卡 + 等级成长曲线</td>
+          </tr>
+          <tr>
+            <td><strong>深度参与</strong></td>
+            <td>排行/小队/装扮</td>
+            <td>创建骑行小队 → 查排行榜 → 装扮数字单车</td>
+            <td>归属感 + 自我表达</td>
+            <td>骑行小队 + 个性化装扮系统</td>
+          </tr>
+          <tr>
+            <td><strong>价值转化</strong></td>
+            <td>骑行币商城</td>
+            <td>骑行币兑换优惠券/月卡 → 碳积分公益捐赠</td>
+            <td>获得感："骑行真的有回报"</td>
+            <td>骑行币 → 实物奖励闭环</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 四、市场定位 -->
+    <div class="section-header" id="market">
+      <div class="section-num">4</div>
+      <h2>市场定位与竞品摘要</h2>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">4.1 差异化定位</h3>
+    <div class="prd-quote">
+      在<strong>城市骑行激励</strong>市场，为<strong>通勤族和休闲骑行者</strong>提供<strong>零门槛、纯Web、游戏化骑行体验</strong>——把通勤路变成寻宝游戏，让每次骑行都有惊喜。
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">4.2 竞品对比简表</h3>
+    <table class="prd-table">
+      <thead><tr><th>维度</th><th>骑乐星球（我方）</th><th>Keep 骑行</th><th>Strava</th><th>哈啰骑行</th></tr></thead>
+      <tbody>
+        <tr><td><strong>核心定位</strong></td><td>游戏化骑行激励</td><td>运动健身综合平台</td><td>专业骑行训练社交</td><td>共享出行+记录</td></tr>
+        <tr><td><strong>目标用户</strong></td><td>通勤族+休闲骑手</td><td>泛运动人群</td><td>中高级骑手</td><td>共享单车用户</td></tr>
+        <tr><td><strong>游戏化</strong></td><td>✅ 地图彩蛋+宝箱+等级+装扮</td><td>⚠️ 课程积分</td><td>⚠️ 段位赛</td><td>⚠️ 碳积分</td></tr>
+        <tr><td><strong>社交</strong></td><td>✅ 擦肩而过+小队（低压力）</td><td>社区动态</td><td>俱乐部（高门槛）</td><td>❌ 无</td></tr>
+        <tr><td><strong>使用门槛</strong></td><td>✅ 纯Web，零安装</td><td>需装App</td><td>需装App</td><td>需装App</td></tr>
+        <tr><td><strong>明显短板</strong></td><td>专业数据深度不足</td><td>骑行非核心</td><td>新手劝退</td><td>游戏化弱</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 五、功能清单 -->
+    <div class="section-header" id="features">
+      <div class="section-num">5</div>
+      <h2>需求功能清单</h2>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">5.1 模块一：骑行记录模块</h3>
+    <table class="prd-table">
+      <thead><tr><th>功能点</th><th>描述</th><th>优先级</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>自动骑行记录</td><td>记录里程、时长、速度、卡路里、碳减排量</td><td><span class="badge badge-p0">P0</span></td><td>基于Geolocation API</td></tr>
+        <tr><td>可视化轨迹地图</td><td>历史路线地图展示，点亮城市探索区域</td><td><span class="badge badge-p0">P0</span></td><td>需接入地图SDK</td></tr>
+        <tr><td>地图彩蛋拾取</td><td>2D地图随机散落金币/宝箱，骑行经过自动拾取</td><td><span class="badge badge-p0">P0</span></td><td>核心游戏化差异化</td></tr>
+        <tr><td>骑行报告</td><td>单次/周/月数据汇总，一键生成分享卡片</td><td><span class="badge badge-p0">P0</span></td><td></td></tr>
+        <tr><td>擦肩而过</td><td>展示同路段相遇骑友数量及路段</td><td><span class="badge badge-p1">P1</span></td><td>轻社交核心</td></tr>
+        <tr><td>骑行结束开宝箱</td><td>骑行≥3km或完成特定路线获得开宝箱机会</td><td><span class="badge badge-p0">P0</span></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">5.2 模块二：成长成就模块</h3>
+    <table class="prd-table">
+      <thead><tr><th>功能点</th><th>描述</th><th>优先级</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>成就徽章系统</td><td>碳减排先锋、城市探索家等徽章，展示在个人主页</td><td><span class="badge badge-p1">P1</span></td><td></td></tr>
+        <tr><td>等级系统</td><td>Lv1新手骑士 → Lv30城市探索家，解锁专属权益和装扮</td><td><span class="badge badge-p0">P0</span></td><td>核心成长曲线</td></tr>
+        <tr><td>连续打卡</td><td>连续3/7/14天骑行获得骑行币和徽章</td><td><span class="badge badge-p0">P0</span></td><td>留存关键</td></tr>
+        <tr><td>数字单车装扮</td><td>车漆、铃铛、挂件、头盔等个性化装扮</td><td><span class="badge badge-p1">P1</span></td><td>自我表达</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">5.3 模块三：任务挑战模块</h3>
+    <table class="prd-table">
+      <thead><tr><th>功能点</th><th>描述</th><th>优先级</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>日常任务</td><td>2-3个低门槛任务（骑行1km/经过公园/骑行10min）</td><td><span class="badge badge-p0">P0</span></td><td></td></tr>
+        <tr><td>周挑战</td><td>1个进阶任务（本周累计骑行10km），大额奖励</td><td><span class="badge badge-p0">P0</span></td><td></td></tr>
+        <tr><td>限定活动</td><td>每月1-2个主题活动（地球日/联名打卡），限时奖励</td><td><span class="badge badge-p2">P2</span></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">5.4 模块四：社交互动模块</h3>
+    <table class="prd-table">
+      <thead><tr><th>功能点</th><th>描述</th><th>优先级</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>好友排行榜</td><td>按周里程/碳减排量排名，支持点赞和送骑行币</td><td><span class="badge badge-p1">P1</span></td><td></td></tr>
+        <tr><td>骑行小队</td><td>创建/加入小队，完成团队任务解锁团队奖励</td><td><span class="badge badge-p1">P1</span></td><td></td></tr>
+        <tr><td>骑行动态</td><td>分享骑行照片/心得/路线，官方话题</td><td><span class="badge badge-p2">P2</span></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">5.5 模块五：激励兑换模块</h3>
+    <table class="prd-table">
+      <thead><tr><th>功能点</th><th>描述</th><th>优先级</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>骑行币体系</td><td>骑行/任务/彩蛋/宝箱均可获得，可兑换优惠券/月卡</td><td><span class="badge badge-p0">P0</span></td><td>经济系统核心</td></tr>
+        <tr><td>碳积分体系</td><td>碳减排量→积分，公益捐赠或兑换装扮</td><td><span class="badge badge-p1">P1</span></td><td></td></tr>
+        <tr><td>兑换商城</td><td>共享单车月卡、品牌优惠券、数字装扮</td><td><span class="badge badge-p1">P1</span></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <!-- 六、核心业务逻辑 -->
+    <div class="section-header" id="logic">
+      <div class="section-num">6</div>
+      <h2>核心业务逻辑</h2>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">6.1 骑行币经济模型</h3>
+    <div class="feature-card">
+      <p style="font-size: 14px; color: #1E293B; line-height: 1.8;">
+        <strong>获取途径：</strong>
+      </p>
+      <table class="prd-table" style="margin-bottom: 16px;">
+        <thead><tr><th>来源</th><th>数量</th><th>频率</th></tr></thead>
+        <tbody>
+          <tr><td>骑行完成（基础）</td><td>1 骑行币/km</td><td>每次骑行</td></tr>
+          <tr><td>地图彩蛋拾取</td><td>5-20 骑行币/个</td><td>随机</td></tr>
+          <tr><td>开宝箱</td><td>10-100 骑行币</td><td>骑行≥3km 1次</td></tr>
+          <tr><td>完成日常任务</td><td>10-30 骑行币/任务</td><td>每日</td></tr>
+          <tr><td>完成周挑战</td><td>100-200 骑行币</td><td>每周</td></tr>
+          <tr><td>连续打卡</td><td>50/100/200 骑行币</td><td>3/7/14天</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 14px; color: #1E293B; line-height: 1.8;">
+        <strong>消耗途径：</strong>共享单车月卡（500币）、品牌优惠券（200-800币）、数字装扮（100-1000币）
+      </p>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">6.2 等级系统</h3>
+    <table class="prd-table">
+      <thead><tr><th>等级</th><th>称号</th><th>所需经验</th><th>解锁权益</th></tr></thead>
+      <tbody>
+        <tr><td>Lv1</td><td>新手骑士</td><td>0</td><td>基础骑行记录</td></tr>
+        <tr><td>Lv5</td><td>城市骑行者</td><td>500</td><td>解锁宝箱高级奖励</td></tr>
+        <tr><td>Lv10</td><td>绿色骑士</td><td>2000</td><td>解锁基础装扮 + 免费骑行券</td></tr>
+        <tr><td>Lv20</td><td>骑行大师</td><td>8000</td><td>解锁限定装扮 + 排行榜</td></tr>
+        <tr><td>Lv30</td><td>城市探索家</td><td>20000</td><td>全部解锁 + 专属称号</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 12px; margin-top: 24px;">6.3 宝箱规则</h3>
+    <div class="feature-card">
+      <ul style="font-size: 14px; color: #1E293B; line-height: 2; padding-left: 16px;">
+        <li><strong>触发条件</strong>：单次骑行 ≥ 3km 获得 1 次开宝箱机会；完成特定路线额外获得 1 次</li>
+        <li><strong>宝箱类型</strong>：铜宝箱（10-30币）、银宝箱（30-60币）、金宝箱（60-100币）、限定宝箱（活动专属装扮）</li>
+        <li><strong>升级机制</strong>：等级越高，出现高级宝箱概率越大</li>
+        <li><strong>每日上限</strong>：通过骑行最多获得 3 次/天，防止刷量</li>
+      </ul>
+    </div>
+
+    <!-- 七、详细方案（待补充） -->
+    <div class="section-header" id="prototype-section">
+      <div class="section-num">7</div>
+      <h2>详细方案（待原型确认后补充）</h2>
+    </div>
+    <div class="prototype-placeholder">
+      <p style="font-size: 16px; font-weight: 500; margin-bottom: 8px;">📦 本章节将在高保真原型完成后补充</p>
+      <p>包含：每个功能模块的交互流程图 + 规则描述 + 原型沙盒（iframe）</p>
+    </div>
+
+    <!-- 八、流程图（待补充） -->
+    <div class="section-header" id="flowcharts">
+      <div class="section-num">8</div>
+      <h2>业务流程图（待原型确认后补充）</h2>
+    </div>
+    <div class="prototype-placeholder">
+      <p style="font-size: 16px; font-weight: 500; margin-bottom: 8px;">📊 本章节将在原型完成后补充</p>
+      <p>包含：核心操作流程图 + 异常分支流程 + 关键时序图（Mermaid）</p>
+    </div>
+
+    <!-- 九、异常处理（待补充） -->
+    <div class="section-header" id="exceptions">
+      <div class="section-num">9</div>
+      <h2>异常与边界处理（待原型确认后补充）</h2>
+    </div>
+    <div class="prototype-placeholder">
+      <p style="font-size: 16px; font-weight: 500; margin-bottom: 8px;">🛡️ 本章节将在原型完成后补充</p>
+      <p>包含：网络异常、定位失败、数据为空、并发冲突等场景处理</p>
+    </div>
+
+    <!-- 十、埋点方案（待补充） -->
+    <div class="section-header" id="analytics">
+      <div class="section-num">10</div>
+      <h2>数据追踪与埋点（待原型确认后补充）</h2>
+    </div>
+    <div class="prototype-placeholder">
+      <p style="font-size: 16px; font-weight: 500; margin-bottom: 8px;">📈 本章节将在原型完成后补充</p>
+      <p>包含：关键页面、按钮、转化漏斗的埋点方案</p>
+    </div>
+
+    <!-- 十一、演进规划 -->
+    <div class="section-header" id="roadmap">
+      <div class="section-num">11</div>
+      <h2>未来演进规划</h2>
+    </div>
+    <table class="prd-table">
+      <thead><tr><th>版本</th><th>时间范围</th><th>核心目标</th><th>关键功能</th></tr></thead>
+      <tbody>
+        <tr><td><strong>v1.0 MVP</strong></td><td>2026 Q2</td><td>跑通核心骑行+游戏化闭环</td><td>骑行记录、地图彩蛋、宝箱、等级、日常任务、骑行币</td></tr>
+        <tr><td><strong>v1.5</strong></td><td>2026 Q3</td><td>增强社交与留存</td><td>擦肩而过、好友排行榜、骑行小队、连续打卡、兑换商城</td></tr>
+        <tr><td><strong>v2.0</strong></td><td>2026 Q4</td><td>深度游戏化与商业化</td><td>数字单车装扮、限定活动、碳积分公益、品牌联名</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- TOC Scroll Spy -->
+  <script>
+    const sections = document.querySelectorAll('[id]');
+    const tocLinks = document.querySelectorAll('.toc a');
+    
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

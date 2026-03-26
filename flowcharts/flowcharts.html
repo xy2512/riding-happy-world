@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>骑乐星球 - 业务流程图</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, sans-serif; background: #f5f5f5; padding: 20px; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 { text-align: center; color: #10b981; margin-bottom: 30px; font-size: 28px; }
+  .flow-section { background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .flow-section h2 { color: #333; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #10b981; }
+  .mermaid { display: flex; justify-content: center; }
+  .mermaid svg { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🚴 骑乐星球 — 核心业务流程图</h1>
+
+  <div class="flow-section">
+    <h2>1. 用户核心使用流程（主流程）</h2>
+    <div class="mermaid">
+flowchart TD
+    A[用户打开App] --> B[登录/注册]
+    B --> C[首页]
+    C --> D{选择操作}
+    D -->|开始骑行| E[选择路线/自由骑行]
+    D -->|查看记录| F[骑行记录页]
+    D -->|查看成长| G[成长中心]
+    D -->|个人中心| H[我的页面]
+    E --> I[骑行中]
+    I --> I1[记录里程/时间/速度]
+    I --> I2[地图彩蛋拾取🪙🎁💎]
+    I2 --> I3[获得骑行币/宝箱机会]
+    I --> J[结束骑行]
+    J --> K[生成骑行报告]
+    K --> K1[展示数据汇总]
+    K --> K2[擦肩而过社交]
+    K --> K3[开启能量宝箱🎁]
+    K3 --> K4{随机奖励}
+    K4 -->|骑行币| K5[存入账户]
+    K4 -->|限定装扮| K6[解锁装扮]
+    K4 -->|骑行券| K7[存入优惠券包]
+    K --> L[一键分享]
+    L --> C
+    F --> F1[查看地图探索]
+    F --> F2[数据统计周/月]
+    F --> F3[健康分析]
+    G --> G1[等级与进度]
+    G --> G2[徽章墙]
+    G --> G3[打卡日历]
+    H --> H1[资产中心]
+    H --> H2[数字单车装扮]
+    H --> H3[兑换商城]
+    H --> H4[排行榜]
+    H --> H5[健康助手]
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>2. 骑行币经济模型</h2>
+    <div class="mermaid">
+flowchart LR
+    subgraph 获取渠道
+        A1[骑行里程] -->|1km=10币| C[骑行币池]
+        A2[完成任务] -->|5-200币| C
+        A3[地图彩蛋] -->|10-50币| C
+        A4[开宝箱] -->|随机10-500| C
+        A5[连续打卡] -->|20-100币| C
+        A6[周挑战] -->|100-200币| C
+    end
+
+    subgraph 消耗渠道
+        C --> D1[兑换骑行券🎫]
+        C --> D2[兑换优惠券🎫]
+        C --> D3[兑换单车装扮🎨]
+        C --> D4[送给好友🤝]
+    end
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>3. 等级与经验系统</h2>
+    <div class="mermaid">
+flowchart TD
+    XP[获取经验值] --> XP1[骑行1km=5XP]
+    XP --> XP2[完成任务=10-50XP]
+    XP --> XP3[开宝箱=20XP]
+    XP --> XP4[打卡=15XP]
+
+    XP1 --> L1[Lv1 新手骑士 0XP]
+    XP2 --> L1
+    XP3 --> L1
+    XP4 --> L1
+
+    L1 -->|100XP| L2[Lv2 城市新手]
+    L2 -->|300XP| L3[Lv3 骑行学徒]
+    L3 -->|600XP| L4[Lv4 城市骑士]
+    L4 -->|1000XP| L5[Lv5 城市骑行者]
+    L5 -->|2000XP| L6[Lv6 骑行达人]
+    L6 -->|3500XP| L7[Lv7 绿色骑士]
+    L7 -->|5500XP| L8[Lv8 城市探索家]
+    L8 -->|8000XP| L9[Lv9 骑行大师]
+    L9 -->|12000XP| L10[Lv10 传奇骑士]
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>4. 宝箱开启流程</h2>
+    <div class="mermaid">
+flowchart TD
+    A[骑行 ≥ 3km] --> B[获得1次开宝箱机会]
+    C[完成特定路线] --> B
+    D[打卡满额] --> B
+    B --> E[骑行报告页展示宝箱]
+    E --> F[用户点击开启]
+    F --> G{随机抽奖}
+    G -->|40%| H[🪙 骑行币 x50-200]
+    G -->|25%| I[🎨 限定车漆/装扮]
+    G -->|20%| J[🎫 骑行券/优惠券]
+    G -->|10%| K[💎 稀有挂件/头盔]
+    G -->|5%| L[👑 传说级装扮]
+    H --> M[动画展示 + 彩纸特效]
+    I --> M
+    J --> M
+    K --> M
+    L --> M
+    M --> N[存入用户资产]
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>5. 任务挑战系统</h2>
+    <div class="mermaid">
+flowchart TD
+    subgraph 日常任务
+        T1[骑行1km] -->|+10🪙| R1[领取奖励]
+        T2[经过1个公园] -->|+15🪙| R1
+        T3[骑行10min] -->|+10🪙| R1
+    end
+
+    subgraph 周挑战
+        W1[累计骑行10km] -->|+200🪙| R2[领取大奖]
+        W2[打卡5天] -->|+150🪙| R2
+    end
+
+    subgraph 限定活动
+        E1[地球日绿色出行] -->|特殊宝箱| R3[限定奖励]
+        E2[联名打卡] -->|限定装扮| R3
+    end
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>6. 擦肩而过轻社交流程</h2>
+    <div class="mermaid">
+flowchart LR
+    A[用户A骑行中] --> B[系统记录GPS轨迹+时间]
+    C[用户B骑行中] --> D[系统记录GPS轨迹+时间]
+    B --> E{轨迹+时间重叠?}
+    D --> E
+    E -->|是| F[标记为擦肩而过]
+    E -->|否| G[无交互]
+    F --> H[骑行报告中展示]
+    H --> I[今日同路骑友数量]
+    H --> J[同路段相遇信息]
+    I --> K[无需添加好友]
+    J --> K
+    K --> L[提升群体归属感]
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>7. 数字单车装扮系统</h2>
+    <div class="mermaid">
+flowchart TD
+    subgraph 获取装扮
+        A1[商城购买🪙] --> I[装扮库存]
+        A2[宝箱随机获得🎁] --> I
+        A3[限定活动解锁🏆] --> I
+        A4[等级权益解锁⬆️] --> I
+    end
+
+    subgraph 装扮分类
+        I --> P1[车漆🎨]
+        I --> P2[铃铛🔔]
+        I --> P3[挂件🦄]
+        I --> P4[头盔🪖]
+    end
+
+    P1 --> U[我的专属单车]
+    P2 --> U
+    P3 --> U
+    P4 --> U
+
+    U --> U1[实时展示2D单车]
+    U --> U2[支持一键更换]
+    U --> U3[个人主页视觉核心]
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <h2>8. 页面导航结构</h2>
+    <div class="mermaid">
+flowchart TD
+    Login[登录页] --> Home[首页]
+    Home -->|Tab| Record[骑行记录]
+    Home -->|Tab| Growth[成长中心]
+    Home -->|Tab| Profile[我的]
+    Home -->|开始骑行| Riding[骑行中]
+    Riding -->|结束| Report[骑行报告]
+    Report -->|返回| Home
+    Record -->|点击彩蛋| Record2[拾取动画+奖励]
+    Growth -->|打卡| Growth2[打卡日历更新]
+    Profile -->|商城| Shop[兑换商城]
+    Shop --> Shop1[虚拟装扮]
+    Shop --> Shop2[实体权益]
+    </div>
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#d1fae5',
+      primaryTextColor: '#047857',
+      primaryBorderColor: '#10b981',
+      lineColor: '#10b981',
+      secondaryColor: '#fef3c7',
+      tertiaryColor: '#dbeafe',
+      fontSize: '14px'
+    }
+  });
+</script>
+</body>
+</html>
