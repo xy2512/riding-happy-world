@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>骑乐星球 - PRD v1.0 最终版</title>
+<title>楠戜箰鏄熺悆 - PRD v1.0 鏈€缁堢増</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;background:#f8fafc;color:#1e293b;line-height:1.8}
@@ -21,7 +21,7 @@ tr:hover{background:#f0fdf4}
 .card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:20px;margin:16px 0}
 pre{background:#f1f5f9;padding:16px;border-radius:8px;font-size:13px;overflow-x:auto;margin:12px 0}
 ul,ol{padding-left:24px;margin:8px 0}li{margin:4px 0}hr{border:none;border-top:1px solid #e2e8f0;margin:32px 0}
-/* iframe 切片样式 */
+/* iframe 鍒囩墖鏍峰紡 */
 .slice-section{display:flex;gap:20px;margin:20px 0;align-items:flex-start}
 .slice-section.slice-vertical{flex-direction:column}
 .slice-section .slice-text{flex:1;min-width:0}
@@ -38,306 +38,306 @@ ul,ol{padding-left:24px;margin:8px 0}li{margin:4px 0}hr{border:none;border-top:1
 <body>
 <div class="container">
 
-<h1>🚴 骑乐星球 — 产品需求文档 v1.0</h1>
-<p style="color:#64748b;font-size:14px;margin-bottom:24px">版本：v1.0 | 日期：2026-03-26 | 状态：最终版</p>
+<h1>馃毚 楠戜箰鏄熺悆 鈥?浜у搧闇€姹傛枃妗?v1.0</h1>
+<p style="color:#64748b;font-size:14px;margin-bottom:24px">鐗堟湰锛歷1.0 | 鏃ユ湡锛?026-03-26 | 鐘舵€侊細鏈€缁堢増</p>
 
 <!-- ===== 1 ===== -->
-<h2>1. 项目概述</h2>
-<h3>1.1 产品定位</h3>
-<p><strong>骑乐星球</strong>是一款面向城市通勤族和骑行爱好者的<strong>游戏化骑行激励Web产品</strong>，通过地图寻宝、宝箱抽奖、成长等级、轻社交等游戏化机制，解决骑行枯燥和用户留存低的问题。</p>
+<h2>1. 椤圭洰姒傝堪</h2>
+<h3>1.1 浜у搧瀹氫綅</h3>
+<p><strong>楠戜箰鏄熺悆</strong>鏄竴娆鹃潰鍚戝煄甯傞€氬嫟鏃忓拰楠戣鐖卞ソ鑰呯殑<strong>娓告垙鍖栭獞琛屾縺鍔盬eb浜у搧</strong>锛岄€氳繃鍦板浘瀵诲疂銆佸疂绠辨娊濂栥€佹垚闀跨瓑绾с€佽交绀句氦绛夋父鎴忓寲鏈哄埗锛岃В鍐抽獞琛屾灟鐕ュ拰鐢ㄦ埛鐣欏瓨浣庣殑闂銆?/p>
 
-<h3>1.2 核心问题</h3>
+<h3>1.2 鏍稿績闂</h3>
 <div class="quote">
-❓ 三大痛点：<br>
-1. <strong>骑行枯燥</strong> — 日常通勤路线固定，缺乏趣味性<br>
-2. <strong>留存率低</strong> — 缺乏持续骑行的正向激励<br>
-3. <strong>缺乏归属感</strong> — 城市骑行者社交连接薄弱
+鉂?涓夊ぇ鐥涚偣锛?br>
+1. <strong>楠戣鏋嚗</strong> 鈥?鏃ュ父閫氬嫟璺嚎鍥哄畾锛岀己涔忚叮鍛虫€?br>
+2. <strong>鐣欏瓨鐜囦綆</strong> 鈥?缂轰箯鎸佺画楠戣鐨勬鍚戞縺鍔?br>
+3. <strong>缂轰箯褰掑睘鎰?/strong> 鈥?鍩庡競楠戣鑰呯ぞ浜よ繛鎺ヨ杽寮?
 </div>
 
-<h3>1.3 解决方案</h3>
-<p><strong>「骑行即游戏」</strong> — 每次骑行都是一场城市探索冒险：</p>
+<h3>1.3 瑙ｅ喅鏂规</h3>
+<p><strong>銆岄獞琛屽嵆娓告垙銆?/strong> 鈥?姣忔楠戣閮芥槸涓€鍦哄煄甯傛帰绱㈠啋闄╋細</p>
 <ul>
-  <li><strong>地图寻宝</strong> — 2D地图随机金币/宝箱/钻石，骑行经过自动拾取</li>
-  <li><strong>宝箱抽奖</strong> — 骑行完成获得宝箱，随机获取骑行币/装扮/优惠券</li>
-  <li><strong>成长等级</strong> — 10级体系 + 9枚成就徽章 + 连续打卡日历</li>
-  <li><strong>轻社交</strong> — 「擦肩而过」无压力社交</li>
-  <li><strong>数字装扮</strong> — 2D单车个性化装扮（车漆/铃铛/挂件/头盔）</li>
+  <li><strong>鍦板浘瀵诲疂</strong> 鈥?2D鍦板浘闅忔満閲戝竵/瀹濈/閽荤煶锛岄獞琛岀粡杩囪嚜鍔ㄦ嬀鍙?/li>
+  <li><strong>瀹濈鎶藉</strong> 鈥?楠戣瀹屾垚鑾峰緱瀹濈锛岄殢鏈鸿幏鍙栭獞琛屽竵/瑁呮壆/浼樻儬鍒?/li>
+  <li><strong>鎴愰暱绛夌骇</strong> 鈥?10绾т綋绯?+ 9鏋氭垚灏卞窘绔?+ 杩炵画鎵撳崱鏃ュ巻</li>
+  <li><strong>杞荤ぞ浜?/strong> 鈥?銆屾摝鑲╄€岃繃銆嶆棤鍘嬪姏绀句氦</li>
+  <li><strong>鏁板瓧瑁呮壆</strong> 鈥?2D鍗曡溅涓€у寲瑁呮壆锛堣溅婕?閾冮摏/鎸備欢/澶寸洈锛?/li>
 </ul>
 
-<h3>1.4 业务约束</h3>
+<h3>1.4 涓氬姟绾︽潫</h3>
 <table>
-  <tr><td><strong>产品形态</strong></td><td>Web端高保真交互原型（移动端优先，max-width: 430px）</td></tr>
-  <tr><td><strong>硬件对接</strong></td><td>本期不做，仅模拟数据</td></tr>
-  <tr><td><strong>成功指标</strong></td><td>DAU、骑行里程、次日/7日/30日留存率</td></tr>
+  <tr><td><strong>浜у搧褰㈡€?/strong></td><td>Web绔珮淇濈湡浜や簰鍘熷瀷锛堢Щ鍔ㄧ浼樺厛锛宮ax-width: 430px锛?/td></tr>
+  <tr><td><strong>纭欢瀵规帴</strong></td><td>鏈湡涓嶅仛锛屼粎妯℃嫙鏁版嵁</td></tr>
+  <tr><td><strong>鎴愬姛鎸囨爣</strong></td><td>DAU銆侀獞琛岄噷绋嬨€佹鏃?7鏃?30鏃ョ暀瀛樼巼</td></tr>
 </table>
 
 <!-- ===== 2 ===== -->
-<h2>2. 用户画像</h2>
+<h2>2. 鐢ㄦ埛鐢诲儚</h2>
 <table>
-  <tr><th>维度</th><th>用户A：城市通勤族</th><th>用户B：周末骑行爱好者</th></tr>
-  <tr><td>年龄</td><td>25-35岁</td><td>22-40岁</td></tr>
-  <tr><td>骑行频率</td><td>每周3-5次（通勤）</td><td>每周1-2次（休闲）</td></tr>
-  <tr><td>单次里程</td><td>3-8km</td><td>15-50km</td></tr>
-  <tr><td>核心诉求</td><td>「每天骑车也能有惊喜」</td><td>「看我的骑行成就有多酷」</td></tr>
+  <tr><th>缁村害</th><th>鐢ㄦ埛A锛氬煄甯傞€氬嫟鏃?/th><th>鐢ㄦ埛B锛氬懆鏈獞琛岀埍濂借€?/th></tr>
+  <tr><td>骞撮緞</td><td>25-35宀?/td><td>22-40宀?/td></tr>
+  <tr><td>楠戣棰戠巼</td><td>姣忓懆3-5娆★紙閫氬嫟锛?/td><td>姣忓懆1-2娆★紙浼戦棽锛?/td></tr>
+  <tr><td>鍗曟閲岀▼</td><td>3-8km</td><td>15-50km</td></tr>
+  <tr><td>鏍稿績璇夋眰</td><td>銆屾瘡澶╅獞杞︿篃鑳芥湁鎯婂枩銆?/td><td>銆岀湅鎴戠殑楠戣鎴愬氨鏈夊閰枫€?/td></tr>
 </table>
 
 <!-- ===== 3 ===== -->
-<h2>3. 竞品分析</h2>
+<h2>3. 绔炲搧鍒嗘瀽</h2>
 <table>
-  <tr><th>维度</th><th>骑乐星球</th><th>Keep骑行</th><th>Strava</th><th>哈啰</th><th>Zwift</th></tr>
-  <tr><td>核心定位</td><td>游戏化骑行激励</td><td>综合运动</td><td>专业训练</td><td>共享出行</td><td>虚拟训练</td></tr>
-  <tr><td>地图彩蛋</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>虚拟世界</td></tr>
-  <tr><td>宝箱抽奖</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-  <tr><td>轻社交</td><td>✅ 擦肩而过</td><td>社区</td><td>段位赛</td><td>碳积分</td><td>赛事</td></tr>
-  <tr><td>数字装扮</td><td>✅ 单车个性化</td><td>❌</td><td>❌</td><td>❌</td><td>虚拟装备</td></tr>
-  <tr><td>使用门槛</td><td>⭐ 零门槛Web</td><td>装App</td><td>装App</td><td>装App</td><td>硬件+App</td></tr>
+  <tr><th>缁村害</th><th>楠戜箰鏄熺悆</th><th>Keep楠戣</th><th>Strava</th><th>鍝堝暟</th><th>Zwift</th></tr>
+  <tr><td>鏍稿績瀹氫綅</td><td>娓告垙鍖栭獞琛屾縺鍔?/td><td>缁煎悎杩愬姩</td><td>涓撲笟璁粌</td><td>鍏变韩鍑鸿</td><td>铏氭嫙璁粌</td></tr>
+  <tr><td>鍦板浘褰╄泲</td><td>鉁?/td><td>鉂?/td><td>鉂?/td><td>鉂?/td><td>铏氭嫙涓栫晫</td></tr>
+  <tr><td>瀹濈鎶藉</td><td>鉁?/td><td>鉂?/td><td>鉂?/td><td>鉂?/td><td>鉂?/td></tr>
+  <tr><td>杞荤ぞ浜?/td><td>鉁?鎿﹁偐鑰岃繃</td><td>绀惧尯</td><td>娈典綅璧?/td><td>纰崇Н鍒?/td><td>璧涗簨</td></tr>
+  <tr><td>鏁板瓧瑁呮壆</td><td>鉁?鍗曡溅涓€у寲</td><td>鉂?/td><td>鉂?/td><td>鉂?/td><td>铏氭嫙瑁呭</td></tr>
+  <tr><td>浣跨敤闂ㄦ</td><td>猸?闆堕棬妲沇eb</td><td>瑁匒pp</td><td>瑁匒pp</td><td>瑁匒pp</td><td>纭欢+App</td></tr>
 </table>
-<div class="quote">🎯 差异化：纯Web零门槛 + 地图寻宝 + 擦肩而过轻社交 + 数字单车装扮</div>
+<div class="quote">馃幆 宸紓鍖栵細绾疻eb闆堕棬妲?+ 鍦板浘瀵诲疂 + 鎿﹁偐鑰岃繃杞荤ぞ浜?+ 鏁板瓧鍗曡溅瑁呮壆</div>
 
 <!-- ===== 4 ===== -->
-<h2>4. 产品架构</h2>
+<h2>4. 浜у搧鏋舵瀯</h2>
 <pre>
-骑乐星球
-├── 🔐 登录页 — 手机号验证码登录
-├── 🏠 首页 ── 今日报告 / 任务入口 / 路线推荐 / 开始骑行
-├── 🗺️ 骑行记录 ── 探索地图(彩蛋) / 周·月统计 / 健康分析 / 历史
-├── 🌟 成长中心 ── 等级进度 / 徽章墙 / 打卡日历
-├── 👤 我的 ── 资产 / 数字单车 / 商城 / 排行 / 健康助手
-├── 🚴 骑行中 ── 实时地图+彩蛋拾取+计时
-└── 🎉 骑行报告 ── 数据汇总+宝箱开启+彩纸
+楠戜箰鏄熺悆
+鈹溾攢鈹€ 馃攼 鐧诲綍椤?鈥?鎵嬫満鍙烽獙璇佺爜鐧诲綍
+鈹溾攢鈹€ 馃彔 棣栭〉 鈹€鈹€ 浠婃棩鎶ュ憡 / 浠诲姟鍏ュ彛 / 璺嚎鎺ㄨ崘 / 寮€濮嬮獞琛?
+鈹溾攢鈹€ 馃椇锔?楠戣璁板綍 鈹€鈹€ 鎺㈢储鍦板浘(褰╄泲) / 鍛锋湀缁熻 / 鍋ュ悍鍒嗘瀽 / 鍘嗗彶
+鈹溾攢鈹€ 馃専 鎴愰暱涓績 鈹€鈹€ 绛夌骇杩涘害 / 寰界珷澧?/ 鎵撳崱鏃ュ巻
+鈹溾攢鈹€ 馃懁 鎴戠殑 鈹€鈹€ 璧勪骇 / 鏁板瓧鍗曡溅 / 鍟嗗煄 / 鎺掕 / 鍋ュ悍鍔╂墜
+鈹溾攢鈹€ 馃毚 楠戣涓?鈹€鈹€ 瀹炴椂鍦板浘+褰╄泲鎷惧彇+璁℃椂
+鈹斺攢鈹€ 馃帀 楠戣鎶ュ憡 鈹€鈹€ 鏁版嵁姹囨€?瀹濈寮€鍚?褰╃焊
 </pre>
 
-<!-- ===== 5 功能需求（含原型切片） ===== -->
-<h2>5. 功能需求与交互原型</h2>
-<p class="tip">💡 本章节每个功能模块右侧都嵌入了对应的交互原型切片，可直接在原型中操作体验。</p>
+<!-- ===== 5 鍔熻兘闇€姹傦紙鍚師鍨嬪垏鐗囷級 ===== -->
+<h2>5. 鍔熻兘闇€姹備笌浜や簰鍘熷瀷</h2>
+<p class="tip">馃挕 鏈珷鑺傛瘡涓姛鑳芥ā鍧楀彸渚ч兘宓屽叆浜嗗搴旂殑浜や簰鍘熷瀷鍒囩墖锛屽彲鐩存帴鍦ㄥ師鍨嬩腑鎿嶄綔浣撻獙銆?/p>
 
-<!-- 5.1 登录 -->
-<h3>5.1 登录模块 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.1 鐧诲綍 -->
+<h3>5.1 鐧诲綍妯″潡 <span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p><strong>功能说明：</strong>手机号+验证码快速登录，无需密码。</p>
+    <p><strong>鍔熻兘璇存槑锛?/strong>鎵嬫満鍙?楠岃瘉鐮佸揩閫熺櫥褰曪紝鏃犻渶瀵嗙爜銆?/p>
     <table>
-      <tr><th>字段</th><th>规则</th></tr>
-      <tr><td>手机号</td><td>+86前缀，11位数字</td></tr>
-      <tr><td>验证码</td><td>6位数字，60秒倒计时</td></tr>
-      <tr><td>登录按钮</td><td>渐变绿色实色按钮</td></tr>
+      <tr><th>瀛楁</th><th>瑙勫垯</th></tr>
+      <tr><td>鎵嬫満鍙?/td><td>+86鍓嶇紑锛?1浣嶆暟瀛?/td></tr>
+      <tr><td>楠岃瘉鐮?/td><td>6浣嶆暟瀛楋紝60绉掑€掕鏃?/td></tr>
+      <tr><td>鐧诲綍鎸夐挳</td><td>娓愬彉缁胯壊瀹炶壊鎸夐挳</td></tr>
     </table>
-    <div class="quote">设计要点：登录页采用全屏绿色渐变背景，居中白色圆角卡片，品牌Logo + 副标题 + 表单，简洁无干扰。</div>
+    <div class="quote">璁捐瑕佺偣锛氱櫥褰曢〉閲囩敤鍏ㄥ睆缁胯壊娓愬彉鑳屾櫙锛屽眳涓櫧鑹插渾瑙掑崱鐗囷紝鍝佺墝Logo + 鍓爣棰?+ 琛ㄥ崟锛岀畝娲佹棤骞叉壈銆?/div>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">🔐 登录页原型 — 可交互</div>
+    <div class="slice-label">馃攼 鐧诲綍椤靛師鍨?鈥?鍙氦浜?/div>
     <iframe src="../prototype/prototype_v2.0.html?focus=login#login" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- 5.2 首页 -->
-<h3>5.2 首页 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.2 棣栭〉 -->
+<h3>5.2 棣栭〉 <span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p><strong>核心入口</strong>，包含骑行报告、任务、路线推荐和开始骑行。</p>
-    <h4>核心组件：</h4>
+    <p><strong>鏍稿績鍏ュ彛</strong>锛屽寘鍚獞琛屾姤鍛娿€佷换鍔°€佽矾绾挎帹鑽愬拰寮€濮嬮獞琛屻€?/p>
+    <h4>鏍稿績缁勪欢锛?/h4>
     <table>
-      <tr><th>组件</th><th>说明</th><th>优先级</th></tr>
-      <tr><td>今日骑行报告卡片</td><td>里程/时间/热量/碳排 2×2 网格 + 击败百分比进度条</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>能量宝箱入口</td><td>点击跳转骑行报告页开启宝箱</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>擦肩而过</td><td>今日同路骑友头像+数量</td><td><span class="badge badge-p1">P1</span></td></tr>
-      <tr><td>任务快捷入口</td><td>日常任务3项进度 + 周挑战进度条</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>智能路线推荐</td><td>风景/心形/健身/美食 4条路线，标注里程和耗时</td><td><span class="badge badge-p1">P1</span></td></tr>
-      <tr><td>开始骑行按钮</td><td>底部大号渐变按钮，脉冲发光动画</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><th>缁勪欢</th><th>璇存槑</th><th>浼樺厛绾?/th></tr>
+      <tr><td>浠婃棩楠戣鎶ュ憡鍗＄墖</td><td>閲岀▼/鏃堕棿/鐑噺/纰虫帓 2脳2 缃戞牸 + 鍑昏触鐧惧垎姣旇繘搴︽潯</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>鑳介噺瀹濈鍏ュ彛</td><td>鐐瑰嚮璺宠浆楠戣鎶ュ憡椤靛紑鍚疂绠?/td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>鎿﹁偐鑰岃繃</td><td>浠婃棩鍚岃矾楠戝弸澶村儚+鏁伴噺</td><td><span class="badge badge-p1">P1</span></td></tr>
+      <tr><td>浠诲姟蹇嵎鍏ュ彛</td><td>鏃ュ父浠诲姟3椤硅繘搴?+ 鍛ㄦ寫鎴樿繘搴︽潯</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>鏅鸿兘璺嚎鎺ㄨ崘</td><td>椋庢櫙/蹇冨舰/鍋ヨ韩/缇庨 4鏉¤矾绾匡紝鏍囨敞閲岀▼鍜岃€楁椂</td><td><span class="badge badge-p1">P1</span></td></tr>
+      <tr><td>寮€濮嬮獞琛屾寜閽?/td><td>搴曢儴澶у彿娓愬彉鎸夐挳锛岃剦鍐插彂鍏夊姩鐢?/td><td><span class="badge badge-p0">P0</span></td></tr>
     </table>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">🏠 首页原型 — 可交互</div>
-    <iframe src="prototype/prototype_v2.0.html?focus=home#home" loading="lazy"></iframe>
+    <div class="slice-label">馃彔 棣栭〉鍘熷瀷 鈥?鍙氦浜?/div>
+    <iframe src="../prototype/prototype_v2.0.html?focus=home#home" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- 5.3 骑行中 -->
-<h3>5.3 骑行中页面 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.3 楠戣涓?-->
+<h3>5.3 楠戣涓〉闈?<span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p><strong>全屏沉浸式</strong>骑行体验，隐藏底部导航。</p>
+    <p><strong>鍏ㄥ睆娌夋蹈寮?/strong>楠戣浣撻獙锛岄殣钘忓簳閮ㄥ鑸€?/p>
     <table>
-      <tr><th>组件</th><th>说明</th></tr>
-      <tr><td>实时地图</td><td>深色背景 + SVG路线虚线 + 骑手定位圆点</td></tr>
-      <tr><td>地图彩蛋</td><td>🪙金币/🎁宝箱/💎钻石，浮动动画，点击拾取</td></tr>
-      <tr><td>实时数据</td><td>距离/速度/热量 3栏实时变化（模拟数据）</td></tr>
-      <tr><td>已收集物品</td><td>底部条展示已拾取的彩蛋图标</td></tr>
-      <tr><td>结束骑行</td><td>红色按钮，跳转骑行报告</td></tr>
+      <tr><th>缁勪欢</th><th>璇存槑</th></tr>
+      <tr><td>瀹炴椂鍦板浘</td><td>娣辫壊鑳屾櫙 + SVG璺嚎铏氱嚎 + 楠戞墜瀹氫綅鍦嗙偣</td></tr>
+      <tr><td>鍦板浘褰╄泲</td><td>馃獧閲戝竵/馃巵瀹濈/馃拵閽荤煶锛屾诞鍔ㄥ姩鐢伙紝鐐瑰嚮鎷惧彇</td></tr>
+      <tr><td>瀹炴椂鏁版嵁</td><td>璺濈/閫熷害/鐑噺 3鏍忓疄鏃跺彉鍖栵紙妯℃嫙鏁版嵁锛?/td></tr>
+      <tr><td>宸叉敹闆嗙墿鍝?/td><td>搴曢儴鏉″睍绀哄凡鎷惧彇鐨勫僵铔嬪浘鏍?/td></tr>
+      <tr><td>缁撴潫楠戣</td><td>绾㈣壊鎸夐挳锛岃烦杞獞琛屾姤鍛?/td></tr>
     </table>
-    <div class="quote">💡 试试：点击地图上的金币🪙、宝箱🎁、钻石💎，观察拾取动画和Toast提示。</div>
+    <div class="quote">馃挕 璇曡瘯锛氱偣鍑诲湴鍥句笂鐨勯噾甯侌煪欍€佸疂绠别煄併€侀捇鐭仇煉庯紝瑙傚療鎷惧彇鍔ㄧ敾鍜孴oast鎻愮ず銆?/div>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">🚴 骑行中原型 — 可交互（点击彩蛋拾取）</div>
-    <iframe src="prototype/prototype_v2.0.html?focus=riding#riding" loading="lazy"></iframe>
+    <div class="slice-label">馃毚 楠戣涓師鍨?鈥?鍙氦浜掞紙鐐瑰嚮褰╄泲鎷惧彇锛?/div>
+    <iframe src="../prototype/prototype_v2.0.html?focus=riding#riding" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- 5.4 骑行报告 -->
-<h3>5.4 骑行报告页 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.4 楠戣鎶ュ憡 -->
+<h3>5.4 楠戣鎶ュ憡椤?<span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p>骑行结束后的<strong>数据汇总+奖励页面</strong>。</p>
+    <p>楠戣缁撴潫鍚庣殑<strong>鏁版嵁姹囨€?濂栧姳椤甸潰</strong>銆?/p>
     <table>
-      <tr><th>组件</th><th>说明</th></tr>
-      <tr><td>数据头部</td><td>绿色渐变背景，大字里程 + 时长/均速/千卡</td></tr>
-      <tr><td>获得奖励</td><td>骑行币 +32、碳积分 +7、宝箱 ×1</td></tr>
-      <tr><td>擦肩而过</td><td>本次同路骑友数量</td></tr>
-      <tr><td>能量宝箱</td><td>橙色渐变按钮 → 弹窗抖动 → 随机奖励 + 彩纸特效🎉</td></tr>
+      <tr><th>缁勪欢</th><th>璇存槑</th></tr>
+      <tr><td>鏁版嵁澶撮儴</td><td>缁胯壊娓愬彉鑳屾櫙锛屽ぇ瀛楅噷绋?+ 鏃堕暱/鍧囬€?鍗冨崱</td></tr>
+      <tr><td>鑾峰緱濂栧姳</td><td>楠戣甯?+32銆佺⒊绉垎 +7銆佸疂绠?脳1</td></tr>
+      <tr><td>鎿﹁偐鑰岃繃</td><td>鏈鍚岃矾楠戝弸鏁伴噺</td></tr>
+      <tr><td>鑳介噺瀹濈</td><td>姗欒壊娓愬彉鎸夐挳 鈫?寮圭獥鎶栧姩 鈫?闅忔満濂栧姳 + 褰╃焊鐗规晥馃帀</td></tr>
     </table>
-    <div class="quote">💡 试试：点击「开启能量宝箱」按钮，观察宝箱抖动动画、随机奖励和彩纸特效。</div>
+    <div class="quote">馃挕 璇曡瘯锛氱偣鍑汇€屽紑鍚兘閲忓疂绠便€嶆寜閽紝瑙傚療瀹濈鎶栧姩鍔ㄧ敾銆侀殢鏈哄鍔卞拰褰╃焊鐗规晥銆?/div>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">🎉 骑行报告原型 — 可交互（点击开宝箱）</div>
-    <iframe src="prototype/prototype_v2.0.html?focus=report#report" loading="lazy"></iframe>
+    <div class="slice-label">馃帀 楠戣鎶ュ憡鍘熷瀷 鈥?鍙氦浜掞紙鐐瑰嚮寮€瀹濈锛?/div>
+    <iframe src="../prototype/prototype_v2.0.html?focus=report#report" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- 5.5 骑行记录 -->
-<h3>5.5 骑行记录页 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.5 楠戣璁板綍 -->
+<h3>5.5 楠戣璁板綍椤?<span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p>历史数据查看与城市探索。</p>
+    <p>鍘嗗彶鏁版嵁鏌ョ湅涓庡煄甯傛帰绱€?/p>
     <table>
-      <tr><th>组件</th><th>说明</th><th>优先级</th></tr>
-      <tr><td>城市探索地图</td><td>2D地图，已探索区域高亮，可点击彩蛋拾取</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>周/月统计</td><td>Tab切换，柱状图展示每日里程</td><td><span class="badge badge-p1">P1</span></td></tr>
-      <tr><td>健康分析</td><td>奶茶换算、种树换算、心肺提升</td><td><span class="badge badge-p1">P1</span></td></tr>
-      <tr><td>骑行历史</td><td>列表展示，含路线名/时间/里程/分享按钮</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><th>缁勪欢</th><th>璇存槑</th><th>浼樺厛绾?/th></tr>
+      <tr><td>鍩庡競鎺㈢储鍦板浘</td><td>2D鍦板浘锛屽凡鎺㈢储鍖哄煙楂樹寒锛屽彲鐐瑰嚮褰╄泲鎷惧彇</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>鍛?鏈堢粺璁?/td><td>Tab鍒囨崲锛屾煴鐘跺浘灞曠ず姣忔棩閲岀▼</td><td><span class="badge badge-p1">P1</span></td></tr>
+      <tr><td>鍋ュ悍鍒嗘瀽</td><td>濂惰尪鎹㈢畻銆佺鏍戞崲绠椼€佸績鑲烘彁鍗?/td><td><span class="badge badge-p1">P1</span></td></tr>
+      <tr><td>楠戣鍘嗗彶</td><td>鍒楄〃灞曠ず锛屽惈璺嚎鍚?鏃堕棿/閲岀▼/鍒嗕韩鎸夐挳</td><td><span class="badge badge-p0">P0</span></td></tr>
     </table>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">🗺️ 骑行记录原型 — 可交互</div>
-    <iframe src="prototype/prototype_v2.0.html?focus=record#record" loading="lazy"></iframe>
+    <div class="slice-label">馃椇锔?楠戣璁板綍鍘熷瀷 鈥?鍙氦浜?/div>
+    <iframe src="../prototype/prototype_v2.0.html?focus=record#record" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- 5.6 成长中心 -->
-<h3>5.6 成长中心 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.6 鎴愰暱涓績 -->
+<h3>5.6 鎴愰暱涓績 <span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p>等级、徽章、打卡三大成长体系。</p>
+    <p>绛夌骇銆佸窘绔犮€佹墦鍗′笁澶ф垚闀夸綋绯汇€?/p>
     <table>
-      <tr><th>组件</th><th>说明</th></tr>
-      <tr><td>等级卡片</td><td>渐变背景，头像+等级+XP进度条+下一级权益</td></tr>
-      <tr><td>徽章墙</td><td>3×3网格，已解锁（彩色边框）/未解锁（灰色）</td></tr>
-      <tr><td>打卡日历</td><td>3月完整日历，已完成/今日/未来三态</td></tr>
-      <tr><td>打卡奖励</td><td>Day1/3/5/7 阶段奖励进度</td></tr>
+      <tr><th>缁勪欢</th><th>璇存槑</th></tr>
+      <tr><td>绛夌骇鍗＄墖</td><td>娓愬彉鑳屾櫙锛屽ご鍍?绛夌骇+XP杩涘害鏉?涓嬩竴绾ф潈鐩?/td></tr>
+      <tr><td>寰界珷澧?/td><td>3脳3缃戞牸锛屽凡瑙ｉ攣锛堝僵鑹茶竟妗嗭級/鏈В閿侊紙鐏拌壊锛?/td></tr>
+      <tr><td>鎵撳崱鏃ュ巻</td><td>3鏈堝畬鏁存棩鍘嗭紝宸插畬鎴?浠婃棩/鏈潵涓夋€?/td></tr>
+      <tr><td>鎵撳崱濂栧姳</td><td>Day1/3/5/7 闃舵濂栧姳杩涘害</td></tr>
     </table>
-    <p><strong>9枚徽章：</strong>新手骑士🏅 / 碳减排先锋🌱 / 通勤达人🏛️ / 夜骑玩家🌙 / 探索者🗺️ / 雨中勇士🌧️ / 速度之星⚡ / 宝箱猎人🎁 / 社交达人🤝</p>
+    <p><strong>9鏋氬窘绔狅細</strong>鏂版墜楠戝＋馃弲 / 纰冲噺鎺掑厛閿嬸煂?/ 閫氬嫟杈句汉馃彌锔?/ 澶滈獞鐜╁馃寵 / 鎺㈢储鑰咅煑猴笍 / 闆ㄤ腑鍕囧＋馃導锔?/ 閫熷害涔嬫槦鈿?/ 瀹濈鐚庝汉馃巵 / 绀句氦杈句汉馃</p>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">🌟 成长中心原型 — 可交互</div>
-    <iframe src="prototype/prototype_v2.0.html?focus=growth#growth" loading="lazy"></iframe>
+    <div class="slice-label">馃専 鎴愰暱涓績鍘熷瀷 鈥?鍙氦浜?/div>
+    <iframe src="../prototype/prototype_v2.0.html?focus=growth#growth" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- 5.7 我的 -->
-<h3>5.7 我的页面 <span class="badge badge-p0">P0</span></h3>
+<!-- 5.7 鎴戠殑 -->
+<h3>5.7 鎴戠殑椤甸潰 <span class="badge badge-p0">P0</span></h3>
 <div class="slice-section">
   <div class="slice-text">
-    <p>个人中心，包含资产、装扮、商城、排行、健康助手。</p>
+    <p>涓汉涓績锛屽寘鍚祫浜с€佽鎵€佸晢鍩庛€佹帓琛屻€佸仴搴峰姪鎵嬨€?/p>
     <table>
-      <tr><th>组件</th><th>说明</th><th>优先级</th></tr>
-      <tr><td>资产中心</td><td>骑行币🪙 2,580 + 碳积分🌿 1,450</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>数字单车</td><td>2D单车🚲 + 已装备装扮标签（车漆/铃铛/挂件/头盔）</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>兑换商城</td><td>「虚拟装扮/实体权益」双Tab切换，2×2商品网格</td><td><span class="badge badge-p0">P0</span></td></tr>
-      <tr><td>好友排行榜</td><td>Top3领奖台 + 我的排名高亮</td><td><span class="badge badge-p1">P1</span></td></tr>
-      <tr><td>骑行健康助手</td><td>心肺/热量/碳排 + 个性化建议</td><td><span class="badge badge-p1">P1</span></td></tr>
+      <tr><th>缁勪欢</th><th>璇存槑</th><th>浼樺厛绾?/th></tr>
+      <tr><td>璧勪骇涓績</td><td>楠戣甯侌煪?2,580 + 纰崇Н鍒嗮煂?1,450</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>鏁板瓧鍗曡溅</td><td>2D鍗曡溅馃毑 + 宸茶澶囪鎵爣绛撅紙杞︽紗/閾冮摏/鎸備欢/澶寸洈锛?/td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>鍏戞崲鍟嗗煄</td><td>銆岃櫄鎷熻鎵?瀹炰綋鏉冪泭銆嶅弻Tab鍒囨崲锛?脳2鍟嗗搧缃戞牸</td><td><span class="badge badge-p0">P0</span></td></tr>
+      <tr><td>濂藉弸鎺掕姒?/td><td>Top3棰嗗鍙?+ 鎴戠殑鎺掑悕楂樹寒</td><td><span class="badge badge-p1">P1</span></td></tr>
+      <tr><td>楠戣鍋ュ悍鍔╂墜</td><td>蹇冭偤/鐑噺/纰虫帓 + 涓€у寲寤鸿</td><td><span class="badge badge-p1">P1</span></td></tr>
     </table>
-    <div class="quote">💡 试试：点击商城的「虚拟装扮/实体权益」Tab切换商品分类。</div>
+    <div class="quote">馃挕 璇曡瘯锛氱偣鍑诲晢鍩庣殑銆岃櫄鎷熻鎵?瀹炰綋鏉冪泭銆峊ab鍒囨崲鍟嗗搧鍒嗙被銆?/div>
   </div>
   <div class="slice-iframe">
-    <div class="slice-label">👤 我的页面原型 — 可交互</div>
-    <iframe src="prototype/prototype_v2.0.html?focus=profile#profile" loading="lazy"></iframe>
+    <div class="slice-label">馃懁 鎴戠殑椤甸潰鍘熷瀷 鈥?鍙氦浜?/div>
+    <iframe src="../prototype/prototype_v2.0.html?focus=profile#profile" loading="lazy"></iframe>
   </div>
 </div>
 
-<!-- ===== 6 游戏化系统 ===== -->
-<h2>6. 游戏化系统设计</h2>
+<!-- ===== 6 娓告垙鍖栫郴缁?===== -->
+<h2>6. 娓告垙鍖栫郴缁熻璁?/h2>
 
-<h3>6.1 骑行币经济模型</h3>
+<h3>6.1 楠戣甯佺粡娴庢ā鍨?/h3>
 <div class="card">
 <table>
-  <tr><th>获取渠道</th><th>奖励</th><th>频率</th></tr>
-  <tr><td>骑行里程</td><td>1km = 10 骑行币</td><td>每次</td></tr>
-  <tr><td>日常任务</td><td>5-20 骑行币</td><td>每日</td></tr>
-  <tr><td>周挑战</td><td>100-200 骑行币</td><td>每周</td></tr>
-  <tr><td>地图彩蛋</td><td>10-50 骑行币</td><td>骑行中</td></tr>
-  <tr><td>宝箱抽奖</td><td>50-500 骑行币</td><td>骑行后</td></tr>
-  <tr><td>连续打卡</td><td>20-100 骑行币</td><td>每日</td></tr>
+  <tr><th>鑾峰彇娓犻亾</th><th>濂栧姳</th><th>棰戠巼</th></tr>
+  <tr><td>楠戣閲岀▼</td><td>1km = 10 楠戣甯?/td><td>姣忔</td></tr>
+  <tr><td>鏃ュ父浠诲姟</td><td>5-20 楠戣甯?/td><td>姣忔棩</td></tr>
+  <tr><td>鍛ㄦ寫鎴?/td><td>100-200 楠戣甯?/td><td>姣忓懆</td></tr>
+  <tr><td>鍦板浘褰╄泲</td><td>10-50 楠戣甯?/td><td>楠戣涓?/td></tr>
+  <tr><td>瀹濈鎶藉</td><td>50-500 楠戣甯?/td><td>楠戣鍚?/td></tr>
+  <tr><td>杩炵画鎵撳崱</td><td>20-100 楠戣甯?/td><td>姣忔棩</td></tr>
 </table>
 </div>
 
-<h3>6.2 等级系统</h3>
+<h3>6.2 绛夌骇绯荤粺</h3>
 <table>
-  <tr><th>等级</th><th>称号</th><th>XP</th><th>解锁权益</th></tr>
-  <tr><td>Lv.1</td><td>新手骑士</td><td>0</td><td>基础功能</td></tr>
-  <tr><td>Lv.2</td><td>城市新手</td><td>100</td><td>自定义头像</td></tr>
-  <tr><td>Lv.3</td><td>骑行学徒</td><td>300</td><td>基础车漆</td></tr>
-  <tr><td>Lv.4</td><td>城市骑士</td><td>600</td><td>打卡日历</td></tr>
-  <tr><td>Lv.5</td><td>城市骑行者</td><td>1,000</td><td>专属骑行券</td></tr>
-  <tr><td>Lv.6</td><td>骑行达人</td><td>2,000</td><td>限定装扮</td></tr>
-  <tr><td>Lv.7</td><td>绿色骑士</td><td>3,500</td><td>骑行小队</td></tr>
-  <tr><td>Lv.8</td><td>城市探索家</td><td>5,500</td><td>高级路线</td></tr>
-  <tr><td>Lv.9</td><td>骑行大师</td><td>8,000</td><td>传说装扮</td></tr>
-  <tr><td>Lv.10</td><td>传奇骑士</td><td>12,000</td><td>全部权益+专属标识</td></tr>
+  <tr><th>绛夌骇</th><th>绉板彿</th><th>XP</th><th>瑙ｉ攣鏉冪泭</th></tr>
+  <tr><td>Lv.1</td><td>鏂版墜楠戝＋</td><td>0</td><td>鍩虹鍔熻兘</td></tr>
+  <tr><td>Lv.2</td><td>鍩庡競鏂版墜</td><td>100</td><td>鑷畾涔夊ご鍍?/td></tr>
+  <tr><td>Lv.3</td><td>楠戣瀛﹀緬</td><td>300</td><td>鍩虹杞︽紗</td></tr>
+  <tr><td>Lv.4</td><td>鍩庡競楠戝＋</td><td>600</td><td>鎵撳崱鏃ュ巻</td></tr>
+  <tr><td>Lv.5</td><td>鍩庡競楠戣鑰?/td><td>1,000</td><td>涓撳睘楠戣鍒?/td></tr>
+  <tr><td>Lv.6</td><td>楠戣杈句汉</td><td>2,000</td><td>闄愬畾瑁呮壆</td></tr>
+  <tr><td>Lv.7</td><td>缁胯壊楠戝＋</td><td>3,500</td><td>楠戣灏忛槦</td></tr>
+  <tr><td>Lv.8</td><td>鍩庡競鎺㈢储瀹?/td><td>5,500</td><td>楂樼骇璺嚎</td></tr>
+  <tr><td>Lv.9</td><td>楠戣澶у笀</td><td>8,000</td><td>浼犺瑁呮壆</td></tr>
+  <tr><td>Lv.10</td><td>浼犲楠戝＋</td><td>12,000</td><td>鍏ㄩ儴鏉冪泭+涓撳睘鏍囪瘑</td></tr>
 </table>
 
-<h3>6.3 宝箱规则</h3>
+<h3>6.3 瀹濈瑙勫垯</h3>
 <table>
-  <tr><th>触发</th><td colspan="3">骑行 ≥ 3km 或完成特定路线 → 获得1次开宝箱机会</td></tr>
-  <tr><th>概率</th><th>类型</th><th>示例</th></tr>
-  <tr><td>40%</td><td>骑行币</td><td>50-200 骑行币</td></tr>
-  <tr><td>25%</td><td>限定装扮</td><td>「极光绿」车漆</td></tr>
-  <tr><td>20%</td><td>优惠券</td><td>共享单车7天卡</td></tr>
-  <tr><td>10%</td><td>稀有装扮</td><td>限定挂件/头盔</td></tr>
-  <tr><td>5%</td><td>传说装扮</td><td>限定传说级车漆</td></tr>
+  <tr><th>瑙﹀彂</th><td colspan="3">楠戣 鈮?3km 鎴栧畬鎴愮壒瀹氳矾绾?鈫?鑾峰緱1娆″紑瀹濈鏈轰細</td></tr>
+  <tr><th>姒傜巼</th><th>绫诲瀷</th><th>绀轰緥</th></tr>
+  <tr><td>40%</td><td>楠戣甯?/td><td>50-200 楠戣甯?/td></tr>
+  <tr><td>25%</td><td>闄愬畾瑁呮壆</td><td>銆屾瀬鍏夌豢銆嶈溅婕?/td></tr>
+  <tr><td>20%</td><td>浼樻儬鍒?/td><td>鍏变韩鍗曡溅7澶╁崱</td></tr>
+  <tr><td>10%</td><td>绋€鏈夎鎵?/td><td>闄愬畾鎸備欢/澶寸洈</td></tr>
+  <tr><td>5%</td><td>浼犺瑁呮壆</td><td>闄愬畾浼犺绾ц溅婕?/td></tr>
 </table>
 
-<!-- ===== 7 流程图（iframe嵌入） ===== -->
-<h2>7. 核心业务流程</h2>
-<p>以下流程图可通过 iframe 直接在文档内交互查看（鼠标滚轮缩放、拖拽移动）：</p>
+<!-- ===== 7 娴佺▼鍥撅紙iframe宓屽叆锛?===== -->
+<h2>7. 鏍稿績涓氬姟娴佺▼</h2>
+<p>浠ヤ笅娴佺▼鍥惧彲閫氳繃 iframe 鐩存帴鍦ㄦ枃妗ｅ唴浜や簰鏌ョ湅锛堥紶鏍囨粴杞缉鏀俱€佹嫋鎷界Щ鍔級锛?/p>
 <div class="slice-full">
-  <div class="slice-label">📊 核心业务流程图 — 8个Mermaid图表（可交互缩放）</div>
+  <div class="slice-label">馃搳 鏍稿績涓氬姟娴佺▼鍥?鈥?8涓狹ermaid鍥捐〃锛堝彲浜や簰缂╂斁锛?/div>
   <iframe src="../flowcharts/flowcharts.html" loading="lazy"></iframe>
 </div>
-<p style="font-size:13px;color:#64748b">包含：①用户主流程 ②骑行币经济模型 ③等级系统 ④宝箱流程 ⑤任务系统 ⑥擦肩而过社交 ⑦装扮系统 ⑧页面导航</p>
+<p style="font-size:13px;color:#64748b">鍖呭惈锛氣憼鐢ㄦ埛涓绘祦绋?鈶￠獞琛屽竵缁忔祹妯″瀷 鈶㈢瓑绾х郴缁?鈶ｅ疂绠辨祦绋?鈶や换鍔＄郴缁?鈶ユ摝鑲╄€岃繃绀句氦 鈶﹁鎵郴缁?鈶ч〉闈㈠鑸?/p>
 
-<!-- ===== 8 完整原型 ===== -->
-<h2>8. 完整交互原型</h2>
-<p>以下嵌入完整交互原型（7个页面），可通过底部Tab导航自由切换：</p>
+<!-- ===== 8 瀹屾暣鍘熷瀷 ===== -->
+<h2>8. 瀹屾暣浜や簰鍘熷瀷</h2>
+<p>浠ヤ笅宓屽叆瀹屾暣浜や簰鍘熷瀷锛?涓〉闈級锛屽彲閫氳繃搴曢儴Tab瀵艰埅鑷敱鍒囨崲锛?/p>
 <div class="slice-full">
-  <div class="slice-label">📄 完整交互原型 prototype_v2.0.html — 7个页面，自由导航体验</div>
-  <iframe src="prototype/prototype_v2.0.html" loading="lazy"></iframe>
+  <div class="slice-label">馃搫 瀹屾暣浜や簰鍘熷瀷 prototype_v2.0.html 鈥?7涓〉闈紝鑷敱瀵艰埅浣撻獙</div>
+  <iframe src="../prototype/prototype_v2.0.html" loading="lazy"></iframe>
 </div>
 
-<!-- ===== 9 指标 ===== -->
-<h2>9. 数据指标</h2>
-<div class="quote">⭐ 北极星指标：<strong>周活跃骑行里程</strong></div>
+<!-- ===== 9 鎸囨爣 ===== -->
+<h2>9. 鏁版嵁鎸囨爣</h2>
+<div class="quote">猸?鍖楁瀬鏄熸寚鏍囷細<strong>鍛ㄦ椿璺冮獞琛岄噷绋?/strong></div>
 <table>
-  <tr><th>类别</th><th>指标</th><th>定义</th><th>MVP目标</th></tr>
-  <tr><td>增长</td><td>DAU</td><td>日活跃用户</td><td>-</td></tr>
-  <tr><td>活跃</td><td>骑行触发率</td><td>DAU中开始骑行</td><td>≥60%</td></tr>
-  <tr><td>留存</td><td>次日留存</td><td>次日回访</td><td>≥40%</td></tr>
-  <tr><td>留存</td><td>7日留存</td><td>7日后回访</td><td>≥25%</td></tr>
-  <tr><td>留存</td><td>30日留存</td><td>30日后回访</td><td>≥15%</td></tr>
-  <tr><td>游戏化</td><td>彩蛋拾取率</td><td>骑行中拾取彩蛋占比</td><td>≥80%</td></tr>
-  <tr><td>游戏化</td><td>宝箱开启率</td><td>获得宝箱后开启</td><td>≥90%</td></tr>
-  <tr><td>商业化</td><td>骑行币兑换率</td><td>兑换用户占比</td><td>≥30%</td></tr>
+  <tr><th>绫诲埆</th><th>鎸囨爣</th><th>瀹氫箟</th><th>MVP鐩爣</th></tr>
+  <tr><td>澧為暱</td><td>DAU</td><td>鏃ユ椿璺冪敤鎴?/td><td>-</td></tr>
+  <tr><td>娲昏穬</td><td>楠戣瑙﹀彂鐜?/td><td>DAU涓紑濮嬮獞琛?/td><td>鈮?0%</td></tr>
+  <tr><td>鐣欏瓨</td><td>娆℃棩鐣欏瓨</td><td>娆℃棩鍥炶</td><td>鈮?0%</td></tr>
+  <tr><td>鐣欏瓨</td><td>7鏃ョ暀瀛?/td><td>7鏃ュ悗鍥炶</td><td>鈮?5%</td></tr>
+  <tr><td>鐣欏瓨</td><td>30鏃ョ暀瀛?/td><td>30鏃ュ悗鍥炶</td><td>鈮?5%</td></tr>
+  <tr><td>娓告垙鍖?/td><td>褰╄泲鎷惧彇鐜?/td><td>楠戣涓嬀鍙栧僵铔嬪崰姣?/td><td>鈮?0%</td></tr>
+  <tr><td>娓告垙鍖?/td><td>瀹濈寮€鍚巼</td><td>鑾峰緱瀹濈鍚庡紑鍚?/td><td>鈮?0%</td></tr>
+  <tr><td>鍟嗕笟鍖?/td><td>楠戣甯佸厬鎹㈢巼</td><td>鍏戞崲鐢ㄦ埛鍗犳瘮</td><td>鈮?0%</td></tr>
 </table>
 
 <!-- ===== 10 ===== -->
-<h2>10. 演进规划</h2>
+<h2>10. 婕旇繘瑙勫垝</h2>
 <table>
-  <tr><th>阶段</th><th>时间</th><th>目标</th><th>核心功能</th></tr>
-  <tr><td><span class="badge badge-p0">MVP</span></td><td>Q2 2026</td><td>验证核心游戏化</td><td>登录+骑行记录+彩蛋+宝箱+等级+徽章+打卡+商城</td></tr>
-  <tr><td><span class="badge badge-p1">V1.5</span></td><td>Q3 2026</td><td>增强社交与内容</td><td>擦肩而过+排行+智能路线+骑行小队+限定活动</td></tr>
-  <tr><td><span class="badge badge-p2">V2.0</span></td><td>Q4 2026</td><td>数据深化+商业化</td><td>硬件对接+健康分析+品牌联名+公益体系</td></tr>
+  <tr><th>闃舵</th><th>鏃堕棿</th><th>鐩爣</th><th>鏍稿績鍔熻兘</th></tr>
+  <tr><td><span class="badge badge-p0">MVP</span></td><td>Q2 2026</td><td>楠岃瘉鏍稿績娓告垙鍖?/td><td>鐧诲綍+楠戣璁板綍+褰╄泲+瀹濈+绛夌骇+寰界珷+鎵撳崱+鍟嗗煄</td></tr>
+  <tr><td><span class="badge badge-p1">V1.5</span></td><td>Q3 2026</td><td>澧炲己绀句氦涓庡唴瀹?/td><td>鎿﹁偐鑰岃繃+鎺掕+鏅鸿兘璺嚎+楠戣灏忛槦+闄愬畾娲诲姩</td></tr>
+  <tr><td><span class="badge badge-p2">V2.0</span></td><td>Q4 2026</td><td>鏁版嵁娣卞寲+鍟嗕笟鍖?/td><td>纭欢瀵规帴+鍋ュ悍鍒嗘瀽+鍝佺墝鑱斿悕+鍏泭浣撶郴</td></tr>
 </table>
 
 <hr>
-<p style="text-align:center;color:#94a3b8;font-size:13px">— 骑乐星球 PRD v1.0 — End of Document —</p>
+<p style="text-align:center;color:#94a3b8;font-size:13px">鈥?楠戜箰鏄熺悆 PRD v1.0 鈥?End of Document 鈥?/p>
 
 </div>
 </body>
